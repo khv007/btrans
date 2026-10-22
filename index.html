@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi</title>
+  <meta name="description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+  
+  <!-- HTTP Cache Invalidation (Forces browsers to always check for updates) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <!-- Standart Favicon & App Nishonlari -->
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="canonical" href="https://bourkhantrans.uz/">
+
+  <!-- Open Graph (Facebook, Telegram, WhatsApp, iMessage) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BOURKHAN TRANS &quot;MCHJ&quot;">
+  <meta property="og:url" content="https://bourkhantrans.uz/">
+  <meta property="og:title" content="BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi">
+  <meta property="og:description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+  <meta property="og:image" content="https://bourkhantrans.uz/preview.png">
+  <meta property="og:image:secure_url" content="https://bourkhantrans.uz/preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="BOURKHAN TRANS &quot;MCHJ&quot;">
+  <meta property="og:locale" content="uz_UZ">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://bourkhantrans.uz/">
+  <meta name="twitter:title" content="BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi">
+  <meta name="twitter:description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+  <meta name="twitter:image" content="https://bourkhantrans.uz/preview.png">
+  <meta name="twitter:image:alt" content="BOURKHAN TRANS &quot;MCHJ&quot;">
+
+  <!-- Android, iOS, Windows, macOS specific meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BOURKHAN TRANS">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#4f46e5" id="theme-color-meta">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Universal Modern SVG Icons) -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css?v=4.6">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- App Wrapper -->
+  <div id="app" class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="header-brand">
+          <div class="brand-icon">
+            <img src="apple-touch-icon.png" alt="BOURKHAN TRANS" class="brand-logo-img">
+          </div>
+          <div class="brand-text">
+            <h1 class="brand-title">BOURKHAN TRANS "MCHJ"</h1>
+            <span class="brand-subtitle">Haydovchilar &amp; Reyslar Ekotizimi</span>
+          </div>
+        </div>
+
+        <!-- Jonli Sana (Kun, Oy, Yil) va Soat (Barcha uchun doimiy ishlaydi) -->
+        <div class="live-datetime-badge" id="live-datetime-badge" title="Joriy sana va vaqt">
+          <span class="live-date">
+            <i data-lucide="calendar-days" class="text-primary"></i>
+            <span id="live-date-text">-- -- ----</span>
+          </span>
+          <span class="live-clock-divider">|</span>
+          <span class="live-time">
+            <i data-lucide="clock"></i>
+            <span id="live-time-text">--:--:--</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- O'ng tomonda: Barcha boshqaruv tugmalari (Mavzu, Texnik yordam va Foydalanuvchi ma'lumoti) -->
+      <div class="header-right-actions">
+        <!-- Yorug'/Qorong'i rejim tugmasi -->
+        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Mavzuni almashtirish (Qorong'i / Yorug')" aria-label="Mavzuni almashtirish">
+          <i data-lucide="moon" id="theme-icon"></i>
+          <span class="theme-text-label" id="theme-text-label">Dark</span>
+        </button>
+
+        <!-- Texnik yordam -->
+        <button id="btn-header-support" class="btn-support-pill" type="button" title="Texnik yordam va Dasturchi (@khvOO7)">
+          <i data-lucide="headset"></i>
+          <span class="support-pill-text">Texnik yordam</span>
+        </button>
+
+        <div class="header-right" id="header-user-info" style="display: none;">
+          <div class="user-pill">
+            <div class="user-avatar" id="header-user-avatar">
+              <i data-lucide="user"></i>
+            </div>
+            <div class="user-details">
+              <span class="user-name" id="header-user-name">Foydalanuvchi</span>
+              <span class="user-role-badge" id="header-user-role">Rol</span>
+            </div>
+          </div>
+          <button id="logout-btn" class="btn-icon danger btn-logout" title="Chiqish">
+            <i data-lucide="log-out"></i>
+            <span class="btn-text-desktop">Chiqish</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Texnik ishlar banneri (Maintenance Notice Banner - sariq undov belgisi bilan) -->
+    <div id="maintenance-banner" class="maintenance-banner" role="alert" style="display: none;">
+      <div class="maintenance-banner-content">
+        <div class="maintenance-icon-badge">
+          <i data-lucide="triangle-alert"></i>
+        </div>
+        <div class="maintenance-text">
+          <strong>Diqqat!</strong> Tizimni yanada yaxshilash ustida ishlayapmiz. Keltirilgan noqulaylik uchun uzr so‘raymiz ⚙️
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN VIEW AREA -->
+    <main class="main-content">
+
+      <!-- ================= 1. LOGIN SECTION ================= -->
+      <section id="login-section" class="view-section active">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-logo-badge">
+              <i data-lucide="shield"></i>
+            </div>
+            <h2>Tizimga kirish</h2>
+            <p>Hisob ma'lumotlaringizni kiriting</p>
+          </div>
+
+          <form id="login-form" class="login-form" autocomplete="off">
+            <div class="form-group">
+              <label for="login-username">
+                <i data-lucide="user"></i> Login
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="login-username" 
+                  placeholder="Loginni kiriting" 
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">
+                <i data-lucide="lock"></i> Parol
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="password" 
+                  id="login-password" 
+                  placeholder="Parolni kiriting" 
+                  required
+                >
+                <button type="button" class="toggle-password" id="toggle-password-btn" tabindex="-1">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block btn-lg">
+              <i data-lucide="log-in"></i> Kirish
+            </button>
+          </form>
+
+          <div class="login-support-prompt">
+            <button type="button" class="btn-login-support-trigger" id="btn-login-support">
+              <i data-lucide="headset" class="text-primary"></i>
+              <span>Savollar yoki texnik yordam kerakmi? <strong>Bog'lanish</strong></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. DRIVER VIEW ================= -->
+      <section id="driver-section" class="view-section">
+        <div class="driver-container">
+          
+          <!-- Driver Info Card -->
+          <div class="driver-hero-card">
+            <div class="driver-profile-header">
+              <div class="driver-avatar-circle">
+                <i data-lucide="truck"></i>
+              </div>
+              <div class="driver-meta">
+                <span class="meta-greeting">Assalomu alaykum,</span>
+                <h2 id="driver-name" class="driver-title-name">Haydovchi Ismi</h2>
+                <div class="driver-tags">
+                  <span class="tag-truck"><i data-lucide="truck"></i> <strong id="driver-truck">Erkin haydovchi (Reysda tanlanadi)</strong></span>
+                  <span class="tag-phone"><i data-lucide="phone"></i> <span id="driver-phone">+998 -- --- -- --</span></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Overview (6 cards) -->
+            <div class="driver-stats-grid six-cards">
+              <div class="stat-card">
+                <div class="stat-icon purple"><i data-lucide="banknote"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">Belgilangan oylik</span>
+                  <strong class="stat-val" id="driver-monthly-salary">0 so'm</strong>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon blue"><i data-lucide="calculator"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">Bugungi kunlik stavka</span>
+                  <strong class="stat-val" id="driver-daily-rate">0 so'm</strong>
+                  <span class="stat-hint" id="driver-days-in-month-hint">25 ish kuni standarti</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon orange"><i data-lucide="navigation"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">Bajargan reyslari</span>
+                  <strong class="stat-val text-primary" id="driver-trips-count">0 ta reys</strong>
+                  <span class="stat-hint" id="driver-trips-hint">Bugun: 0 ta reys</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon green"><i data-lucide="wallet"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">To'plangan maosh</span>
+                  <strong class="stat-val text-success" id="driver-earned-salary">0 so'm</strong>
+                </div>
+              </div>
+
+              <div class="stat-card advance-card">
+                <div class="stat-icon red"><i data-lucide="coins"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">Olingan avans</span>
+                  <strong class="stat-val text-danger" id="driver-advance-card-val">0 so'm</strong>
+                  <span class="stat-hint" id="driver-advance-card-hint">Avans yo'q</span>
+                </div>
+              </div>
+
+              <div class="stat-card highlight-net">
+                <div class="stat-icon teal"><i data-lucide="coins"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">To'lanadigan sof qoldiq</span>
+                  <strong class="stat-val text-net" id="driver-net-salary-card-val">0 so'm</strong>
+                  <span class="stat-hint">Maosh minus avans</span>
+                </div>
+              </div>
+
+              <div class="stat-card highlight-ranking" id="driver-ranking-card" role="button" tabindex="0" title="TOP reytingni ochish">
+                <div class="stat-icon gold"><i data-lucide="crown"></i></div>
+                <div class="stat-content">
+                  <span class="stat-label">Haydovchilar reytingi</span>
+                  <strong class="stat-val text-gold" id="driver-rank-card-val">TOP reyting</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver Advance Notification Banner -->
+          <div id="driver-advance-banner" class="driver-advance-banner" style="display: none;">
+            <div class="advance-banner-icon"><i data-lucide="coins"></i></div>
+            <div class="advance-banner-body">
+              <div class="advance-banner-header">
+                <span class="advance-alert-title"><i data-lucide="alert-circle" class="text-danger"></i> Siz avans olgansiz:</span>
+                <strong id="driver-advance-badge-val" class="advance-val-text">-0 so'm</strong>
+              </div>
+              <p id="driver-advance-banner-desc" class="advance-banner-desc">Ushbu mablag' oylik maoshingiz hisob-kitobidan chegiriladi. Qoldiq to'lanishi kerak bo'lgan sof maosh: <strong id="driver-advance-net-val">0 so'm</strong></p>
+            </div>
+          </div>
+
+          <!-- Driver Action Card (Trip Setup & Shift Actions) -->
+          <div class="shift-action-card">
+            <div class="shift-status-header">
+              <div class="status-indicator-pill" id="driver-shift-badge">
+                <span class="pulse-dot"></span>
+                <span id="driver-shift-badge-text">Holat aniqlanmoqda...</span>
+              </div>
+              <div class="current-date-text" id="driver-today-date">
+                <i data-lucide="calendar-days"></i> Bugun: --
+              </div>
+            </div>
+
+            <!-- 1. Trip Configuration Block (when NOT in progress) -->
+            <div id="driver-trip-config-box" class="trip-config-box">
+              <div class="trip-config-header">
+                <div class="trip-config-title">
+                  <i data-lucide="sliders-horizontal" class="text-primary"></i>
+                  <span>Reys parametrlarini tanlang:</span>
+                </div>
+                <div class="trip-rule-tag">
+                  <i data-lucide="shield"></i> 4 soatlik xavfsizlik limiti
+                </div>
+              </div>
+
+              <div class="trip-security-notice">
+                <i data-lucide="info"></i>
+                <span><strong>Eslatma:</strong> Reys boshlangandan so'ng xavfsizlik va nazorat talabiga ko'ra kamida <strong>4 soat</strong> davomida reysni tugatish tugmasi qulflanadi.</span>
+              </div>
+
+              <div class="trip-setup-sections">
+                <!-- Section 1: Mashina tanlash -->
+                <div class="trip-setup-card">
+                  <div class="trip-setup-card-header">
+                    <label for="driver-trip-truck" class="trip-setup-label" style="margin-bottom: 0;">
+                      <i data-lucide="truck" class="text-primary"></i>
+                      <span>Xizmat ko'rsatadigan yuk mashinasini tanlang:</span>
+                      <span class="required-star">*</span>
+                    </label>
+                    <span id="truck-availability-summary" class="truck-avail-badge"></span>
+                  </div>
+                  <div class="select-wrapper-custom">
+                    <select id="driver-trip-truck" class="input-control select-truck-large" required>
+                      <option value="">-- Mashinani qo'lda tanlang (Bo'sh mashinalar) --</option>
+                    </select>
+                  </div>
+                  <div id="driver-trip-truck-status" class="truck-select-status-hint empty">
+                    <i data-lucide="pointer"></i> <span>Reysga chiqish uchun ro'yxatdan bo'sh mashinani qo'lda tanlang</span>
+                  </div>
+                </div>
+
+                <!-- Section 2: Marshrut tanlash -->
+                <div class="trip-setup-card">
+                  <label class="trip-setup-label">
+                    <i data-lucide="map-pin" class="text-primary"></i>
+                    <span>Marshrut yo'nalishi (Viloyatlar bo'yicha):</span>
+                    <span class="required-star">*</span>
+                  </label>
+
+                  <div class="route-builder-grid">
+                    <div class="route-point-box">
+                      <span class="route-point-label"><i data-lucide="circle-dot" class="text-success"></i> Qayerdan (Chiqish):</span>
+                      <select id="driver-trip-from" class="input-control route-select-large">
+                        <!-- Populated by JS -->
+                      </select>
+                    </div>
+
+                    <div class="route-swap-box">
+                      <button type="button" id="btn-swap-regions" class="btn-swap-route-large" title="Yo'nalishni almashtirish (Masalan: Namangan ⇄ Farg'ona)">
+                        <i data-lucide="arrow-left-right"></i>
+                      </button>
+                    </div>
+
+                    <div class="route-point-box">
+                      <span class="route-point-label"><i data-lucide="map-pin" class="text-danger"></i> Qayerga (Borish):</span>
+                      <select id="driver-trip-to" class="input-control route-select-large">
+                        <!-- Populated by JS -->
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Live Route Distance & Min Time Preview -->
+                  <div id="route-distance-preview" class="route-distance-preview" style="margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.88rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <i data-lucide="route" class="text-primary"></i>
+                      <span>Yo'nalish masofasi: <strong id="preview-distance-km" style="color: var(--primary);">-- km</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                      <i data-lucide="shield" class="text-warning"></i>
+                      <span>Minimal ruxsat vaqti: <strong id="preview-min-time" class="text-warning">--</strong></span>
+                      <small id="preview-min-formula" style="color: var(--text-muted); font-size: 0.75rem;">(70 km/s + 15 daq)</small>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.4rem;" id="preview-eta-box">
+                      <i data-lucide="clock" class="text-info"></i>
+                      <span>Ruxsat etilish soati: <strong id="preview-unlock-time" class="text-info">--:--</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Active Trip Live Display (when in progress) -->
+            <div id="driver-active-trip-box" class="active-trip-banner" style="display: none;">
+              <div class="active-trip-header">
+                <div class="active-trip-badge">
+                  <span class="pulse-indicator"></span>
+                  <span id="active-trip-label">Reys #1 davom etmoqda</span>
+                </div>
+                <div class="active-trip-truck-tag">
+                  <i data-lucide="truck"></i>
+                  <span id="active-trip-truck">Volvo FH 500 (01 A 777 AA)</span>
+                </div>
+              </div>
+
+              <div class="active-trip-route-display">
+                <div class="route-city from">
+                  <div class="route-city-icon text-success">
+                    <i data-lucide="circle-dot"></i>
+                  </div>
+                  <div class="route-city-info">
+                    <span class="route-city-label">Jo'nash joyi</span>
+                    <strong id="active-trip-from">Namangan</strong>
+                  </div>
+                </div>
+
+                <div class="route-middle-connector">
+                  <div class="route-road-track">
+                    <span class="route-dash-line"></span>
+                    <div class="route-truck-bubble">
+                      <i data-lucide="truck"></i>
+                    </div>
+                    <span class="route-dash-line"></span>
+                  </div>
+                  <div class="route-distance-pill">
+                    <span id="active-trip-distance-badge" class="active-distance-badge">-- km</span>
+                  </div>
+                </div>
+
+                <div class="route-city to">
+                  <div class="route-city-info text-right">
+                    <span class="route-city-label">Yetib borish</span>
+                    <strong id="active-trip-to">Farg'ona</strong>
+                  </div>
+                  <div class="route-city-icon text-danger">
+                    <i data-lucide="map-pin"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Distance-Based Minimal Time Live Control Card -->
+              <div id="trip-lock-status-card" class="trip-lock-card">
+                <div class="trip-lock-header">
+                  <div class="trip-lock-indicator">
+                    <div class="lock-icon-box" id="trip-lock-icon-box">
+                      <i data-lucide="lock" id="trip-lock-icon"></i>
+                    </div>
+                    <div>
+                      <strong id="trip-lock-title">Minimal ruxsat vaqti nazorati (70 km/s + 15 daq)</strong>
+                      <span class="trip-lock-sub" id="trip-lock-sub">Reysni erta yakunlashdan himoyalangan</span>
+                    </div>
+                  </div>
+                  <div class="trip-lock-timer-box">
+                    <span class="timer-label">Qolgan vaqt:</span>
+                    <strong class="timer-countdown" id="trip-lock-countdown">--:--:--</strong>
+                  </div>
+                </div>
+
+                <div class="trip-lock-progress-container">
+                  <div class="trip-lock-progress-fill" id="trip-lock-progress-bar" style="width: 0%;"></div>
+                </div>
+
+                <div class="trip-lock-stats">
+                  <span id="trip-elapsed-display"><i data-lucide="timer"></i> Boshlanganiga: 0 daqiqa</span>
+                  <span id="trip-unlock-clock-display" style="font-size:0.82rem; color:var(--text-muted);"><i data-lucide="clock" class="text-warning"></i> Ruxsat: <strong id="trip-unlock-clock-val" class="text-warning">--:--</strong></span>
+                  <span id="trip-status-display" class="lock-status-badge locked"><i data-lucide="lock"></i> Tugatish qulflangan</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shift times box -->
+            <div class="shift-times-box" id="shift-times-box">
+              <div class="time-item">
+                <span class="time-label"><i data-lucide="briefcase" class="text-success"></i> Ish boshlangan vaqt:</span>
+                <span class="time-value" id="today-shift-start-display">--:--:--</span>
+                <span class="time-date" id="today-shift-date"><i data-lucide="calendar-days"></i> Sana: --</span>
+              </div>
+              <div class="time-separator">
+                <i data-lucide="arrow-left-right"></i>
+              </div>
+              <div class="time-item center-stat">
+                <span class="time-label"><i data-lucide="navigation" class="text-primary"></i> Bugungi reyslar:</span>
+                <span class="time-value text-primary" id="today-trips-count-display">0 ta reys</span>
+                <span class="time-date" id="today-trip-status-hint">Reys kutilmoqda</span>
+              </div>
+              <div class="time-separator">
+                <i data-lucide="arrow-right"></i>
+              </div>
+              <div class="time-item">
+                <span class="time-label"><i data-lucide="flag" class="text-danger"></i> Ish yakunlangan vaqt:</span>
+                <span class="time-value" id="today-shift-end-display">--:--:--</span>
+                <span class="time-date" id="today-shift-end-status">Kutilmoqda</span>
+              </div>
+            </div>
+
+            <!-- Big Action Buttons -->
+            <div class="action-buttons-wrapper" id="driver-actions-container">
+              <!-- 1. Start Shift (Ishni boshlash) -->
+              <button 
+                type="button"
+                id="btn-start-shift" 
+                class="btn-big btn-start-shift" 
+                title="Bugungi ish kunini ochish"
+                style="display: none;"
+              >
+                <div class="btn-big-icon">
+                  <i data-lucide="play"></i>
+                </div>
+                <div class="btn-big-content">
+                  <span class="btn-big-title">Ishni boshlash</span>
+                  <span class="btn-big-sub">Bugungi ish kunini ochish va reysga tayyorlanish</span>
+                </div>
+              </button>
+
+              <!-- 2. Start Trip (Reysni boshlash) -->
+              <button 
+                type="button"
+                id="btn-start-trip" 
+                class="btn-big btn-checkin" 
+                title="Yangi reysga yo'lga chiqish"
+                style="display: none;"
+              >
+                <div class="btn-big-icon">
+                  <i data-lucide="play"></i>
+                </div>
+                <div class="btn-big-content">
+                  <span class="btn-big-title" id="btn-start-trip-title">1-reysni boshlash</span>
+                  <span class="btn-big-sub" id="btn-start-trip-sub">Mashina va marshrutni muhrlab yo'lga chiqish</span>
+                </div>
+              </button>
+
+              <!-- 3. Finish Trip (Reysni yakunlash) -->
+              <button 
+                type="button"
+                id="btn-finish-trip" 
+                class="btn-big btn-checkout" 
+                title="Hozirgi reysni yakunlash (Minimal ruxsat vaqti o'tishi kerak)"
+                style="display: none;"
+              >
+                <div class="btn-big-icon">
+                  <i data-lucide="check-circle-2" id="btn-finish-trip-icon"></i>
+                </div>
+                <div class="btn-big-content">
+                  <span class="btn-big-title" id="btn-finish-trip-title">Reysni yakunlash</span>
+                  <span class="btn-big-sub" id="btn-finish-trip-sub">Minimal ruxsat vaqti o'tishi shart</span>
+                </div>
+              </button>
+
+              <!-- 4. End Shift (Ishni yakunlash) - Side-by-side with Start Trip after completing a trip -->
+              <button 
+                type="button"
+                id="btn-end-shift" 
+                class="btn-big btn-end-shift" 
+                title="Bugungi ish kunini to'liq yakunlash"
+                style="display: none;"
+              >
+                <div class="btn-big-icon">
+                  <i data-lucide="power"></i>
+                </div>
+                <div class="btn-big-content">
+                  <span class="btn-big-title" id="btn-end-shift-title">Ishni yakunlash</span>
+                  <span class="btn-big-sub" id="btn-end-shift-sub">Bugungi ish kunini tugatish va kunlik stavkani olish</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Message banner after completed shift -->
+            <div id="driver-shift-completed-alert" class="alert-success-card" style="display: none;">
+              <div class="alert-icon"><i data-lucide="check-circle-2"></i></div>
+              <div class="alert-body">
+                <h4 id="alert-completed-title">Bugungi ish kuni to'liq yakunlandi!</h4>
+                <p id="alert-completed-desc">Bugun barcha reyslar muvaffaqiyatli bajarildi. Ushbu ish kuni uchun 1 kunlik stavka (<strong id="alert-credited-amount">0 so'm</strong>) hisoblangan maoshingizga qo'shildi. Dam oling!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver Recent Logs Table (Trips) -->
+          <div class="driver-history-card">
+            <div class="card-header">
+              <div class="card-title">
+                <i data-lucide="navigation" class="text-primary"></i>
+                <h3>Shu oydagi reyslar va davomat tarixi</h3>
+              </div>
+              <div class="card-badge-info">
+                <span id="driver-month-trips-summary">Jami reyslar: 0 ta</span>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Reys #</th>
+                    <th>Sana</th>
+                    <th>Moshina</th>
+                    <th>Marshrut</th>
+                    <th>Boshlangan</th>
+                    <th>Tugatilgan</th>
+                    <th>Davomiyligi</th>
+                    <th>Stavka</th>
+                    <th>Holat</th>
+                  </tr>
+                </thead>
+                <tbody id="driver-history-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Driver Advances History Card -->
+          <div class="driver-history-card mt-4" id="driver-advances-history-card">
+            <div class="card-header">
+              <div class="card-title">
+                <i data-lucide="coins" class="text-warning"></i>
+                <h3>Olingan avanslar tarixi</h3>
+              </div>
+              <div class="card-badge-info">
+                <span id="driver-advances-total-badge" class="text-danger">Jami avans: 0 so'm</span>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Sana va vaqt</th>
+                    <th>Avans summasi</th>
+                    <th>Izoh / Maqsadi</th>
+                    <th>Holat</th>
+                  </tr>
+                </thead>
+                <tbody id="driver-advances-tbody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ================= 3. ADMIN VIEW ================= -->
+      <section id="admin-section" class="view-section">
+        <div class="admin-container">
+          
+          <!-- Viewer Read-Only Mode Banner -->
+          <div id="viewer-alert-banner" class="viewer-alert-banner" style="display: none;">
+            <div class="viewer-alert-icon"><i data-lucide="eye"></i></div>
+            <div class="viewer-alert-content">
+              <div class="viewer-alert-title"><i data-lucide="shield"></i> KUZATUVCHI (FAQAT KO'RISH) REJIMI FAOL</div>
+              <p class="viewer-alert-desc">Siz tizimni to'liq kuzatish rejimidasiz. Barcha haydovchilar, reyslar, maoshlar, avanslar va hisob ma'lumotlarini to'liq ko'rishingiz mumkin. Ma'lumotlarni tahrirlash, o'chirish yoki o'zgartirish huquqi cheklangan.</p>
+            </div>
+          </div>
+
+
+
+           <!-- Admin Dashboard Stats -->
+          <div class="admin-stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="users"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Jami haydovchilar</span>
+                <strong class="stat-val" id="admin-stat-total-drivers">0 nafar</strong>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon orange"><i data-lucide="navigation"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Bugungi reyslar soni</span>
+                <strong class="stat-val text-primary" id="admin-stat-today-trips">0 ta reys</strong>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="user-check"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Bugun ishda (Smenada)</span>
+                <strong class="stat-val text-primary" id="admin-stat-today-active">0 nafar</strong>
+                <small id="admin-stat-active-breakdown" style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Reysda: 0 &bull; Kutmoqda: 0</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon cyan"><i data-lucide="coffee"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Dam olganlar (Bugun)</span>
+                <strong class="stat-val text-warning" id="admin-stat-today-finished">0 nafar</strong>
+                <small style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Smena ochmagan</small>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon indigo"><i data-lucide="truck"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Mashinalar parki</span>
+                <strong class="stat-val text-info" id="admin-stat-total-trucks">0 ta</strong>
+                <small id="admin-stat-trucks-breakdown" style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Band: 0 &bull; Bo'sh: 0</small>
+              </div>
+            </div>
+
+            <div class="stat-card advance-card">
+              <div class="stat-icon red"><i data-lucide="coins"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Jami berilgan avans</span>
+                <strong class="stat-val text-danger" id="admin-stat-total-advances">0 so'm</strong>
+              </div>
+            </div>
+
+            <div class="stat-card highlight payout-card">
+              <div class="stat-icon green"><i data-lucide="banknote"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Joriy oyda to'plangan maosh</span>
+                <strong class="stat-val text-success" id="admin-stat-total-payout">0 so'm</strong>
+              </div>
+            </div>
+
+            <div class="stat-card highlight-ranking" id="admin-ranking-card" role="button" tabindex="0" title="TOP reytingni ochish">
+              <div class="stat-icon gold"><i data-lucide="crown"></i></div>
+              <div class="stat-content">
+                <span class="stat-label">Haydovchilar reytingi</span>
+                <strong class="stat-val text-gold" id="admin-rank-card-val">TOP reyting</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Navigation Tabs -->
+          <div class="admin-tabs-nav">
+            <button class="tab-btn active" data-tab="tab-attendance">
+              <i data-lucide="calendar-check"></i>
+              <span>Davomat va Reyslar</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-drivers">
+              <i data-lucide="id-card"></i>
+              <span>Haydovchilar ro'yxati</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-trucks">
+              <i data-lucide="truck"></i>
+              <span>Mashinalar parki</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-advances">
+              <i data-lucide="coins"></i>
+              <span>Avanslar</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-salary-payout" id="tab-btn-salary-payout">
+              <i data-lucide="banknote"></i>
+              <span>Oylik berish</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-add-driver">
+              <i data-lucide="user-plus"></i>
+              <span>Yangi xodim qo'shish</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-settings">
+              <i data-lucide="settings"></i>
+              <span id="tab-settings-nav-text">Admin Sozlamalari</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-database" id="tab-btn-database">
+              <i data-lucide="database" class="text-warning"></i>
+              <span>Ma'lumotlar bazasi</span>
+            </button>
+            <button class="tab-btn superadmin-tab-btn" data-tab="tab-users-management" id="tab-btn-users-management" style="display: none;">
+              <i data-lucide="crown" class="text-warning"></i>
+              <span>Rollar Boshqaruvi</span>
+            </button>
+          </div>
+
+          <!-- ================= TAB 1: ATTENDANCE & REYSLAR ================= -->
+          <div id="tab-attendance" class="admin-tab-pane active">
+            <div class="panel-card">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="list"></i> Barcha haydovchilarning reyslar va davomat hisoboti</h3>
+                  <p class="panel-subtitle">Kunlik reyslar, marshrutlar (12 viloyat), mashinalar va kunlik stavkalar monitoringi</p>
+                </div>
+                
+                <!-- Action Controls: Filter, Avans & Export -->
+                <div class="panel-actions-group">
+                  <div class="filter-item">
+                    <label for="filter-month"><i data-lucide="calendar"></i> Oyni tanlash:</label>
+                    <input type="month" id="filter-month" class="input-control">
+                  </div>
+
+                  <div class="filter-item">
+                    <label for="search-attendance"><i data-lucide="search"></i> Qidiruv:</label>
+                    <input type="text" id="search-attendance" class="input-control" placeholder="F.I.O, Mashina, Marshrut...">
+                  </div>
+
+                  <button id="btn-export-excel" class="btn btn-success">
+                    <i data-lucide="file-spreadsheet"></i> Excel (.xlsx)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Filter Chips -->
+              <div class="attendance-filter-chips" id="attendance-filter-chips">
+                <button type="button" class="filter-chip active" data-filter="all"><i data-lucide="list"></i> Barchasi</button>
+                <button type="button" class="filter-chip" data-filter="in_progress"><span class="chip-dot pulse"></span> Yo'lda (Reysda)</button>
+                <button type="button" class="filter-chip" data-filter="completed"><i data-lucide="check-circle-2" class="text-success"></i> Tugatilgan</button>
+                <button type="button" class="filter-chip" data-filter="today"><i data-lucide="calendar" class="text-primary"></i> Faqat bugun</button>
+              </div>
+
+              <!-- Driver Monthly Summary Mini-Cards -->
+              <div class="driver-summary-row" id="driver-summary-cards">
+                <!-- Dynamically injected driver monthly totals -->
+              </div>
+
+              <!-- Attendance Table -->
+              <div class="table-responsive">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small id="table-total-count-hint" style="color:var(--text-muted); font-weight:600;">Jami: 0 ta reys</small>
+                </div>
+                <table class="data-table" id="admin-attendance-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Sana</th>
+                      <th>Reys #</th>
+                      <th>Haydovchi F.I.O</th>
+                      <th>Mashina</th>
+                      <th>Marshrut</th>
+                      <th>Boshlangan</th>
+                      <th>Tugatilgan</th>
+                      <th>Davomiyligi</th>
+                      <th class="col-attendance-rate">Kunlik stavka</th>
+                      <th>Holat</th>
+                      <th>Amal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-attendance-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- Attendance Pagination -->
+              <div class="pagination-wrapper" id="attendance-pagination-wrapper"></div>
+            </div>
+          </div>
+
+          <!-- ================= TAB 2: DRIVERS LIST ================= -->
+          <div id="tab-drivers" class="admin-tab-pane">
+            <div class="panel-card">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="contact"></i> Haydovchilar ro'yxati va ma'lumotlari</h3>
+                  <p class="panel-subtitle">Barcha ro'yxatdan o'tgan haydovchilar, ularning oylik stavkasi, olingan avanslari va sof qoldig'i</p>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small style="color:var(--text-muted); font-weight:600;">Haydovchilar</small>
+                </div>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>F.I.O</th>
+                      <th>Telefon</th>
+                      <th class="col-driver-salary">Oylik maoshi</th>
+                      <th class="col-driver-daily-rate">Kunlik stavka</th>
+                      <th>Oydagi reyslar</th>
+                      <th class="col-driver-earned">To'plangan maosh</th>
+                      <th class="col-driver-advance">Olingan avans</th>
+                      <th class="col-driver-net">To'lanadigan qoldiq</th>
+                      <th class="col-driver-auth"><span class="th-admin-label">Login / Parol</span><span class="th-viewer-label">Login</span></th>
+                      <th>Harakatlar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-drivers-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- Drivers Pagination -->
+              <div class="pagination-wrapper" id="drivers-pagination-wrapper"></div>
+            </div>
+          </div>
+
+          <!-- ================= TAB 3: TRUCKS MANAGEMENT ================= -->
+          <div id="tab-trucks" class="admin-tab-pane">
+            <div class="panel-card">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="truck" class="text-primary"></i> Mashinalar parki (Moshina rusumi va davlat raqami)</h3>
+                  <p class="panel-subtitle">Admin yangi mashinalarni qo'shadi, haydovchilar esa reysga chiqishdan oldin mashinani tanlaydi</p>
+                </div>
+              </div>
+
+              <!-- Add Truck Form -->
+              <form id="add-truck-form" class="admin-form inline-form-grid" autocomplete="off">
+                <div class="form-row">
+                  <div class="form-group col-5">
+                    <label for="new-truck-name"><i data-lucide="truck"></i> Mashina nomi / rusumi *</label>
+                    <input type="text" id="new-truck-name" class="input-control" placeholder="Masalan: Volvo FH 500, MAN TGX, Isuzu..." required>
+                  </div>
+                  <div class="form-group col-4">
+                    <label for="new-truck-plate"><i data-lucide="barcode"></i> Davlat raqami *</label>
+                    <input type="text" id="new-truck-plate" class="input-control" placeholder="Masalan: 01 A 777 AA" required>
+                  </div>
+                  <div class="form-group col-3 form-btn-align">
+                    <button type="submit" class="btn btn-primary btn-block">
+                      <i data-lucide="plus"></i> Mashinani qo'shish
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <hr class="divider">
+
+              <!-- Trucks Table -->
+              <div class="table-responsive">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small style="color:var(--text-muted); font-weight:600;">Avtopark</small>
+                </div>
+                <table class="data-table" id="admin-trucks-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Mashina nomi / rusumi</th>
+                      <th>Davlat raqami</th>
+                      <th>Hozirgi holati</th>
+                      <th>Amallar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-trucks-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= TAB 4: ADVANCES (AVANSLAR) ================= -->
+          <div id="tab-advances" class="admin-tab-pane">
+            <div class="panel-card">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="coins" class="text-warning"></i> Haydovchilarga avans berish va hisobi</h3>
+                  <p class="panel-subtitle">Haydovchiga avans berilganda, u haydovchining kabinetida avans sifatida ko'rinadi va maoshidan chegiriladi</p>
+                </div>
+              </div>
+
+              <!-- Give Advance Form -->
+              <form id="give-advance-form" class="admin-form" autocomplete="off">
+                <div class="form-row">
+                  <div class="form-group col-4">
+                    <label for="advance-driver-select"><i data-lucide="user"></i> Haydovchini tanlang *</label>
+                    <select id="advance-driver-select" class="input-control" required>
+                      <option value="">-- Haydovchini tanlang --</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-4">
+                    <label for="advance-amount-input"><i data-lucide="banknote"></i> Avans summasi (so'm) *</label>
+                    <input type="number" id="advance-amount-input" class="input-control" placeholder="Masalan: 500000" min="10000" step="10000" required>
+                  </div>
+
+                  <div class="form-group col-4">
+                    <label for="advance-comment-input"><i data-lucide="message-square"></i> Izoh / Maqsad</label>
+                    <input type="text" id="advance-comment-input" class="input-control" placeholder="Yo'l xarajati, yoqilg'i uchun...">
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-warning btn-lg">
+                    <i data-lucide="coins"></i> Avans berishni tasdiqlash
+                  </button>
+                </div>
+              </form>
+
+              <hr class="divider">
+
+              <!-- Advances History Table -->
+              <div class="table-responsive">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small style="color:var(--text-muted); font-weight:600;">Avanslar</small>
+                </div>
+                <table class="data-table" id="admin-advances-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Sana va vaqt</th>
+                      <th>Haydovchi F.I.O</th>
+                      <th>Telefon</th>
+                      <th>Avans summasi</th>
+                      <th>Izoh</th>
+                      <th>Amal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-advances-tbody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- Advances Pagination -->
+              <div class="pagination-wrapper" id="advances-pagination-wrapper"></div>
+            </div>
+          </div>
+
+          <!-- ================= TAB: SALARY PAYOUT (OYLIK BERISH) ================= -->
+          <div id="tab-salary-payout" class="admin-tab-pane">
+            <div class="panel-card">
+              <div class="panel-card-header salary-payout-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="banknote" class="text-success"></i> Haydovchilarga oylik berish va qoldiqlar hisobi</h3>
+                  <p class="panel-subtitle">Xodimlarga oylik to'lash, olingan avanslarni chegirish va ortiqcha/kam berilgan summani yangi oyga avtomatik o'tkazish</p>
+                </div>
+                
+                <!-- Quick Month Filter and Actions -->
+                <div class="salary-payout-header-actions">
+                  <div class="month-picker-pill">
+                    <i data-lucide="calendar-days" class="text-primary"></i>
+                    <label for="salary-payout-month">Hisob oyi:</label>
+                    <input type="month" id="salary-payout-month" class="custom-month-input">
+                  </div>
+                  <button type="button" id="btn-refresh-salary-payout" class="btn btn-secondary btn-sm" title="Jadvalni yangilash">
+                    <i data-lucide="rotate-ccw"></i> Yangilash
+                  </button>
+                </div>
+              </div>
+
+              <!-- Salary Payout Mini KPI Cards -->
+              <div class="payout-kpi-grid">
+                <div class="payout-kpi-card">
+                  <div class="kpi-icon blue"><i data-lucide="users"></i></div>
+                  <div class="kpi-info">
+                    <span class="kpi-title">Jami haydovchilar</span>
+                    <strong class="kpi-number" id="payout-kpi-total-drivers">0 ta</strong>
+                  </div>
+                </div>
+                <div class="payout-kpi-card">
+                  <div class="kpi-icon green"><i data-lucide="coins"></i></div>
+                  <div class="kpi-info">
+                    <span class="kpi-title">Topgan puli (Haqi)</span>
+                    <strong class="kpi-number text-success" id="payout-kpi-total-earned">0 so'm</strong>
+                  </div>
+                </div>
+                <div class="payout-kpi-card">
+                  <div class="kpi-icon orange"><i data-lucide="coins"></i></div>
+                  <div class="kpi-info">
+                    <span class="kpi-title">Jami avanslar</span>
+                    <strong class="kpi-number text-danger" id="payout-kpi-total-advances">0 so'm</strong>
+                  </div>
+                </div>
+                <div class="payout-kpi-card">
+                  <div class="kpi-icon purple"><i data-lucide="banknote"></i></div>
+                  <div class="kpi-info">
+                    <span class="kpi-title">Haqiqatda to'langan oylik</span>
+                    <strong class="kpi-number text-primary" id="payout-kpi-total-paid">0 so'm</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Search and Filter bar -->
+              <div class="salary-search-bar">
+                <div class="input-with-icon salary-search-box">
+                  <i data-lucide="search"></i>
+                  <input type="text" id="search-salary-driver" class="input-control" placeholder="Haydovchini ismi yoki familiyasi bo'yicha qidirish...">
+                </div>
+                <div class="salary-sort-hint">
+                  <i data-lucide="arrow-down-a-z" class="text-primary"></i>
+                  <span>Alifbo bo'yicha tartiblangan (A–Z)</span>
+                </div>
+              </div>
+
+              <!-- Salary Table -->
+              <div class="table-responsive salary-table-wrapper">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small style="color:var(--text-muted); font-weight:600;">Oylik berish</small>
+                </div>
+                <table class="data-table salary-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 45px; text-align: center;">#</th>
+                      <th style="min-width: 220px;">Ism familiya</th>
+                      <th style="min-width: 140px;">Oyligi</th>
+                      <th style="min-width: 120px; text-align: center;">Necha kun ishladi</th>
+                      <th style="min-width: 150px;">Topgan puli</th>
+                      <th style="min-width: 170px;">Avansi</th>
+                      <th style="min-width: 220px;">Qancha pul berilgani</th>
+                      <th style="min-width: 160px; text-align: center;">Holati</th>
+                    </tr>
+                  </thead>
+                  <tbody id="salary-payout-tbody">
+                    <!-- Populated dynamically via JS -->
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ================= TAB 5: ADD NEW DRIVER ================= -->
+          <div id="tab-add-driver" class="admin-tab-pane">
+            <div class="panel-card max-w-700">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="user-plus" class="text-primary"></i> Yangi haydovchi qo'shish</h3>
+                  <p class="panel-subtitle">Haydovchiga tizimga kirishi uchun login va parol bering (Mashina reys paytida erkin tanlanadi)</p>
+                </div>
+              </div>
+
+              <form id="add-driver-form" class="admin-form" autocomplete="off">
+                <div class="form-row">
+                  <div class="form-group col-12">
+                    <label for="new-driver-name"><i data-lucide="user"></i> Haydovchi F.I.O *</label>
+                    <input type="text" id="new-driver-name" class="input-control" placeholder="Masalan: Azizbek Karimov" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label for="new-driver-phone"><i data-lucide="phone"></i> Telefon raqami *</label>
+                    <input type="tel" id="new-driver-phone" class="input-control" placeholder="+998 90 123 45 67" required>
+                  </div>
+
+                  <div class="form-group col-6">
+                    <label for="new-driver-salary"><i data-lucide="banknote"></i> Belgilangan oylik maoshi (so'mda) *</label>
+                    <input type="number" id="new-driver-salary" class="input-control" placeholder="Masalan: 12000000" min="100000" step="50000" required>
+                    <small class="field-hint" id="salary-preview-hint">Kunlik stavka taxminan: 0 so'm / kun</small>
+                  </div>
+                </div>
+
+                <div class="form-row auth-credentials-group">
+                  <div class="form-group col-6">
+                    <label for="new-driver-login"><i data-lucide="badge-check"></i> Kirish logini *</label>
+                    <input type="text" id="new-driver-login" class="input-control" placeholder="azizbek" required>
+                  </div>
+
+                  <div class="form-group col-6">
+                    <label for="new-driver-password"><i data-lucide="key"></i> Kirish paroli *</label>
+                    <input type="text" id="new-driver-password" class="input-control" placeholder="Parol (masalan: 1234)" required>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i data-lucide="save"></i> Haydovchini saqlash
+                  </button>
+                  <button type="reset" class="btn btn-secondary btn-lg">
+                    <i data-lucide="rotate-ccw"></i> Tozalash
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- ================= TAB 6: SETTINGS ================= -->
+          <div id="tab-settings" class="admin-tab-pane">
+            <div class="panel-card max-w-700">
+
+              <!-- Kuzatuvchi Uchun Shaxsiy Sozlamalar (Faqat Kuzatuvchi rejimida ko'rinadi) -->
+              <div id="viewer-settings-panel" class="viewer-settings-panel" style="display: none;">
+                <div class="panel-card-header" style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem;">
+                  <div class="panel-title-group">
+                    <h3 style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                      <i data-lucide="user-cog" class="text-info"></i> Kuzatuvchi hisob sozlamalari
+                    </h3>
+                    <p class="panel-subtitle">Kuzatuvchi hisobingiz uchun yangi login va parol o'rnating</p>
+                  </div>
+                </div>
+
+                <form id="viewer-self-settings-form" class="admin-form" autocomplete="off">
+                  <div class="form-group">
+                    <label for="viewer-self-login"><i data-lucide="user"></i> Kuzatuvchi logini *</label>
+                    <input type="text" id="viewer-self-login" class="input-control" placeholder="Husanboy" value="Husanboy" required minlength="3">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="viewer-self-password"><i data-lucide="key"></i> Yangi parol *</label>
+                    <div class="input-wrapper" style="position: relative;">
+                      <input type="password" id="viewer-self-password" class="input-control" placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
+                      <button type="button" class="toggle-password" id="toggle-viewer-self-pass" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                        <i data-lucide="eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="viewer-self-confirm-password"><i data-lucide="check-circle-2"></i> Yangi parolni tasdiqlash *</label>
+                    <div class="input-wrapper" style="position: relative;">
+                      <input type="password" id="viewer-self-confirm-password" class="input-control" placeholder="Yangi parolni qayta kiriting" required minlength="4">
+                      <button type="button" class="toggle-password" id="toggle-viewer-self-confirm" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                        <i data-lucide="eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="viewer-secret-code"><i data-lucide="shield" class="text-warning"></i> Maxfiy tasdiqlash kodi *</label>
+                    <div class="input-wrapper" style="position: relative;">
+                      <input type="password" id="viewer-secret-code" class="input-control" placeholder="14 xonali maxfiy kodni kiriting" required autocomplete="off">
+                      <button type="button" class="toggle-password" id="toggle-viewer-secret-code" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1" title="Kodni ko'rsatish/yashirish">
+                        <i data-lucide="eye"></i>
+                      </button>
+                    </div>
+                    <small style="display: block; margin-top: 0.35rem; color: var(--text-muted); font-size: 0.8rem;">
+                      <i data-lucide="info"></i> Login va parolni o'zgartirish uchun maxsus 14 xonali xavfsizlik kodini kiriting
+                    </small>
+                  </div>
+
+                  <div class="form-actions" style="margin-top: 1.25rem;">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i data-lucide="save"></i> Login va parolni saqlash
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Admin Sozlamalari (Faqat Bosh Administrator ko'radi) -->
+              <div id="admin-settings-panel">
+                <div class="panel-card-header">
+                  <div class="panel-title-group">
+                    <h3><i data-lucide="key" class="text-warning"></i> Admin parolini o'zgartirish</h3>
+                    <p class="panel-subtitle">Xavfsizlik uchun tizim parolini muntazam yangilab turing</p>
+                  </div>
+                </div>
+
+                <form id="change-admin-password-form" class="admin-form" autocomplete="off">
+                  <div class="form-group">
+                    <label for="admin-current-pass"><i data-lucide="lock"></i> Hozirgi parol *</label>
+                    <input type="password" id="admin-current-pass" class="input-control" placeholder="Hozirgi parolingiz" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="admin-new-pass"><i data-lucide="lock-open"></i> Yangi parol *</label>
+                    <input type="password" id="admin-new-pass" class="input-control" placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="admin-confirm-pass"><i data-lucide="check-circle-2"></i> Yangi parolni tasdiqlash *</label>
+                    <input type="password" id="admin-confirm-pass" class="input-control" placeholder="Yangi parolni qayta kiriting" required minlength="4">
+                  </div>
+
+                  <div class="form-actions" style="margin-top: 1.5rem; margin-bottom: 2rem;">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i data-lucide="shield"></i> Parolni yangilash
+                    </button>
+                  </div>
+                </form>
+
+              <!-- End of admin-settings-panel -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= TAB 7: DATABASE & DEVELOPER CONTROLS ================= -->
+          <div id="tab-database" class="admin-tab-pane">
+            <div class="panel-card max-w-700">
+
+              <!-- Dasturchi Xavfsizlik Qulfi (PIN Gate) -->
+              <div id="dev-auth-gate" class="dev-auth-gate">
+
+                <!-- Bloklangan holat banneri (3 marta xato kiritilganda ko'rinadi) -->
+                <div id="dev-lockout-banner" class="dev-lockout-banner" style="display: none;">
+                  <div class="dev-lockout-icon">
+                    <i data-lucide="ban"></i>
+                  </div>
+                  <h3 class="dev-lockout-title">Kirish Vaqtincha Cheklandi</h3>
+                  <p class="dev-lockout-desc">
+                    Xavfsizlik maqsadida 3 marta ketma-ket noto'g'ri maxfiy kod kiritilgani sababli Ma'lumotlar bazasiga kirish bloklandi.
+                  </p>
+                  <div class="dev-lockout-timer-box">
+                    <span class="timer-label"><i data-lucide="clock"></i> Blokdan chiqishgacha qolgan vaqt:</span>
+                    <strong id="dev-lockout-countdown" class="dev-lockout-countdown">--:--:--</strong>
+                    <small id="dev-lockout-date" class="dev-lockout-date"></small>
+                  </div>
+                </div>
+
+                <!-- Oddiy PIN kiritish oynasi (bloklanmagan holatda) -->
+                <div id="dev-auth-normal-box">
+                  <div class="dev-lock-badge">
+                    <i data-lucide="shield-check"></i>
+                  </div>
+                  <h3 class="dev-gate-title">Dasturchi Xavfsizlik Qulfi</h3>
+                  <p class="dev-gate-desc">
+                    Ushbu bo'lim faqat tizim dasturchisi (texnik ma'mur) uchun mo'ljallangan. Ma'lumotlar bazasi va Firebase sozlamalariga kirish uchun 14 xonali maxfiy xavfsizlik kodini kiriting.
+                  </p>
+
+                  <!-- Noto'g'ri urinishlar haqida ogohlantirish -->
+                  <div id="dev-attempts-warning" class="dev-attempts-warning" style="display: none;">
+                    <i data-lucide="triangle-alert"></i>
+                    <span id="dev-attempts-text">Noto'g'ri urinishlar: 1 / 3</span>
+                  </div>
+
+                  <form id="dev-auth-form" class="dev-auth-form" autocomplete="off">
+                    <div class="form-group">
+                      <label for="dev-secret-code"><i data-lucide="key"></i> Maxsus xavfsizlik kodi *</label>
+                      <div class="input-wrapper" style="position: relative;">
+                        <input type="password" id="dev-secret-code" class="input-control" placeholder="14 xonali maxfiy kodni kiriting" required maxlength="30" autofocus>
+                        <button type="button" class="toggle-password" id="toggle-dev-secret-code" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                          <i data-lucide="eye"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="form-actions" style="margin-top: 1.25rem;">
+                      <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        <i data-lucide="lock-open"></i> Ruxsatni tasdiqlash
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Dasturchi Ochiq Kontenti (Faqat to'g'ri kod terilganda ko'rinadi) -->
+              <div id="dev-database-content" style="display: none;">
+                <div class="dev-unlocked-banner" style="display: flex; justify-content: space-between; align-items: center; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                  <div style="display: flex; align-items: center; gap: 0.65rem; color: #10b981; font-weight: 700; font-size: 0.92rem;">
+                    <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
+                    <span>Dasturchi rejimi faol (Baza boshqaruvi ochildi)</span>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" id="btn-lock-dev" title="Bo'limni qayta qulflash">
+                    <i data-lucide="lock"></i> Qulflash (Chiqish)
+                  </button>
+                </div>
+
+                <!-- Cloud Database (Firebase Firestore) Management -->
+                <div class="cloud-db-box" style="background: var(--bg-surface-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                      <i data-lucide="cloud" class="text-primary"></i> Markaziy Bulutli Baza (Firebase Firestore)
+                    </h4>
+                    <span id="cloud-status-badge" class="badge" style="padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.35rem; background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);">
+                      <i data-lucide="loader-2" class="animate-spin"></i> Tekshirilmoqda...
+                    </span>
+                  </div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;">
+                    Barcha IP manzillar, kompyuterlar va haydovchilar telefonidan bir vaqtda kirib ishlashi uchun Firebase ma'lumotlar bazasi ulanishi lozim.
+                  </p>
+
+                  <form id="firebase-config-form" autocomplete="off">
+                    <div class="form-group" style="margin-bottom: 0.75rem;">
+                      <label for="firebase-config-json" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                        <span><i data-lucide="code"></i> Firebase Config sozlamalari (JSON formatida)</span>
+                        <a href="https://console.firebase.google.com/" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline; font-size: 0.78rem;">Firebase konsoliga o'tish &nearr;</a>
+                      </label>
+                      <textarea id="firebase-config-json" class="input-control" rows="5" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "loyiha.firebaseapp.com",
+  "projectId": "loyiha-id",
+  "storageBucket": "loyiha.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "1:123456789:web:..."
+}' style="font-family: monospace; font-size: 0.8rem;"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                      <button type="submit" class="btn btn-primary" id="btn-save-firebase">
+                        <i data-lucide="cloud-upload"></i> Saqlash va ulanish
+                      </button>
+                      <button type="button" class="btn btn-secondary" id="btn-sync-to-cloud" title="Hozirgi brauzerdagi ma'lumotlarni bulutli bazaga yozish">
+                        <i data-lucide="refresh-cw"></i> Hozirgi ma'lumotlarni Bulutga yuklash
+                      </button>
+                      <button type="button" class="btn btn-danger-outline" id="btn-disconnect-firebase" style="display: none;">
+                        <i data-lucide="unlink"></i> Uzish
+                      </button>
+                    </div>
+                  </form>
+
+                  <div id="cloud-info-msg" style="margin-top: 0.75rem; font-size: 0.8rem; display: none;"></div>
+                </div>
+
+                <!-- System Backup & Reset Options -->
+                <div class="danger-zone-box">
+                  <h4><i data-lucide="database"></i> Ma'lumotlar bazasi (LocalStorage boshqaruvi)</h4>
+                  <p>Barcha ma'lumotlar brauzeringiz xotirasida (LocalStorage) xavfsiz saqlanadi.</p>
+                  <div class="danger-actions">
+                    <button type="button" id="btn-export-backup" class="btn btn-outline">
+                      <i data-lucide="download"></i> Zaxira nusxasini yuklab olish (.json)
+                    </button>
+                    <button type="button" id="btn-reset-demo" class="btn btn-danger-outline">
+                      <i data-lucide="rotate-ccw"></i> Boshlang'ich holatga qaytarish (Reset Demo)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ================= TAB 8: SUPERADMIN USERS & ROLES MANAGEMENT ================= -->
+          <div id="tab-users-management" class="admin-tab-pane">
+            <div class="panel-card">
+              <div class="panel-card-header">
+                <div class="panel-title-group">
+                  <h3><i data-lucide="crown" class="text-warning"></i> Tizim Rollari va Foydalanuvchilar Boshqaruvi</h3>
+                  <p class="panel-subtitle">Barcha administratorlar, kuzatuvchi va haydovchilar hisoblari, login, parol, telefon va maoshlarini to'liq nazorat qilish</p>
+                </div>
+                <div class="panel-actions-group">
+                  <button type="button" class="btn btn-primary" id="btn-open-add-user-modal">
+                    <i data-lucide="user-plus"></i> Yangi hisob qo'shish
+                  </button>
+                </div>
+              </div>
+
+              <!-- SuperAdmin KPI Stats -->
+              <div class="superadmin-stats-grid">
+                <div class="super-stat-card">
+                  <div class="stat-icon purple"><i data-lucide="users"></i></div>
+                  <div class="stat-content">
+                    <span class="stat-label">Jami hisoblar</span>
+                    <strong class="stat-val" id="superadmin-stat-total-users">0 nafar</strong>
+                  </div>
+                </div>
+                <div class="super-stat-card">
+                  <div class="stat-icon blue"><i data-lucide="shield-check"></i></div>
+                  <div class="stat-content">
+                    <span class="stat-label">Administratorlar</span>
+                    <strong class="stat-val text-primary" id="superadmin-stat-total-admins">1 nafar</strong>
+                  </div>
+                </div>
+                <div class="super-stat-card">
+                  <div class="stat-icon cyan"><i data-lucide="eye"></i></div>
+                  <div class="stat-content">
+                    <span class="stat-label">Kuzatuvchilar</span>
+                    <strong class="stat-val text-info" id="superadmin-stat-total-viewers">1 nafar</strong>
+                  </div>
+                </div>
+                <div class="super-stat-card">
+                  <div class="stat-icon green"><i data-lucide="truck"></i></div>
+                  <div class="stat-content">
+                    <span class="stat-label">Haydovchilar</span>
+                    <strong class="stat-val text-success" id="superadmin-stat-total-drivers">0 nafar</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filter & Search Toolbar -->
+              <div class="users-filter-toolbar">
+                <div class="role-filter-pills" id="users-role-filter-group">
+                  <button type="button" class="role-pill active" data-filter="all">Barchasi (<span id="count-pill-all">0</span>)</button>
+                  <button type="button" class="role-pill" data-filter="admin">Adminlar (<span id="count-pill-admin">1</span>)</button>
+                  <button type="button" class="role-pill" data-filter="viewer">Kuzatuvchi (<span id="count-pill-viewer">1</span>)</button>
+                  <button type="button" class="role-pill" data-filter="driver">Haydovchilar (<span id="count-pill-driver">0</span>)</button>
+                </div>
+
+                <div class="users-search-box">
+                  <i data-lucide="search"></i>
+                  <input type="text" id="search-users-input" class="input-control" placeholder="F.I.O, login yoki telefon bo'yicha qidiruv...">
+                </div>
+              </div>
+
+              <!-- Users Data Table -->
+              <div class="table-responsive">
+                <div class="table-scroll-hint">
+                  <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+                  <small style="color:var(--text-muted); font-weight:600;">Rollar</small>
+                </div>
+                <table class="data-table users-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Foydalanuvchi / F.I.O</th>
+                      <th>Roli</th>
+                      <th>Logini</th>
+                      <th>Paroli</th>
+                      <th>Telefon raqami</th>
+                      <th>Oylik maoshi</th>
+                      <th>Kunlik stavka</th>
+                      <th>Holati</th>
+                      <th style="text-align: right;">Amallar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="superadmin-users-tbody">
+                    <!-- Populated dynamically by JS -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- Users Management Pagination -->
+              <div class="pagination-wrapper" id="users-pagination-wrapper"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <p class="footer-copyright">&copy; <span id="current-year">2026</span> Bourkhan Trans &bull; Barcha huquqlar himoyalangan</p>
+      </div>
+    </footer>
+  </div> <!-- /#app -->
+
+
+
+  <!-- ================= DRIVER DETAILS REPORT MODAL (DOUBLE CLICK) ================= -->
+  <div id="driver-details-modal" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon"><i data-lucide="id-card"></i></div>
+          <div>
+            <h3 id="modal-driver-name">Haydovchi F.I.O</h3>
+            <span class="modal-subtitle" id="modal-driver-truck">Erkin haydovchi</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-driver-modal" title="Yopish">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Driver KPI cards -->
+        <div class="modal-kpi-grid">
+          <div class="modal-kpi-card">
+            <span class="kpi-label"><i data-lucide="phone"></i> Telefon</span>
+            <strong class="kpi-val" id="modal-driver-phone">+998 -- --- -- --</strong>
+          </div>
+          <div class="modal-kpi-card modal-kpi-salary">
+            <span class="kpi-label"><i data-lucide="banknote"></i> Belgilangan oylik</span>
+            <strong class="kpi-val" id="modal-driver-salary">0 so'm</strong>
+          </div>
+          <div class="modal-kpi-card modal-kpi-daily">
+            <span class="kpi-label"><i data-lucide="calculator"></i> Kunlik stavka</span>
+            <strong class="kpi-val" id="modal-driver-daily-rate">0 so'm</strong>
+          </div>
+          <div class="modal-kpi-card highlight">
+            <span class="kpi-label"><i data-lucide="navigation"></i> Oydagi reyslar soni</span>
+            <strong class="kpi-val text-primary" id="modal-driver-trips-count">0 ta reys</strong>
+          </div>
+          <div class="modal-kpi-card modal-kpi-earned">
+            <span class="kpi-label"><i data-lucide="coins"></i> Jami hisoblangan maosh</span>
+            <strong class="kpi-val text-success" id="modal-driver-earned-salary">0 so'm</strong>
+          </div>
+          <div class="modal-kpi-card advance-kpi modal-kpi-advance">
+            <span class="kpi-label"><i data-lucide="coins"></i> Olingan avans</span>
+            <strong class="kpi-val text-danger" id="modal-driver-advance-val">0 so'm</strong>
+          </div>
+          <div class="modal-kpi-card highlight green modal-kpi-net">
+            <span class="kpi-label"><i data-lucide="wallet"></i> To'lanadigan sof qoldiq</span>
+            <strong class="kpi-val text-success" id="modal-driver-net-salary">0 so'm</strong>
+          </div>
+        </div>
+
+        <!-- Attendance log table -->
+        <div class="modal-table-header">
+          <h4><i data-lucide="history"></i> Bajargan reyslari va kunlik stavkalari tarixi</h4>
+          <button type="button" class="btn btn-sm btn-success" id="btn-modal-export-excel">
+            <i data-lucide="file-spreadsheet"></i> Excelga yuklash (.xlsx)
+          </button>
+        </div>
+
+        <div class="table-responsive modal-table-responsive">
+          <table class="data-table" id="modal-driver-attendance-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Sana</th>
+                <th>Reys #</th>
+                <th>Mashina</th>
+                <th>Marshrut</th>
+                <th>Kelgan vaqti</th>
+                <th>Ketgan vaqti</th>
+                <th>Davomiyligi</th>
+                <th class="col-modal-trip-rate">Stavka</th>
+                <th>Holat</th>
+              </tr>
+            </thead>
+            <tbody id="modal-driver-attendance-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Advances history table in modal -->
+        <div id="modal-advances-section">
+          <div class="modal-table-header" style="margin-top: 1.5rem;">
+            <h4><i data-lucide="receipt" class="text-danger"></i> Olingan avanslar tarixi</h4>
+          </div>
+          <div class="table-responsive modal-table-responsive">
+            <table class="data-table" id="modal-driver-advances-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Sana va vaqt</th>
+                  <th>Avans summasi</th>
+                  <th>Izoh / Maqsad</th>
+                  <th>Bergan shaxs</th>
+                </tr>
+              </thead>
+              <tbody id="modal-driver-advances-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-modal-close-footer">
+          <i data-lucide="x"></i> Yopish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HAYDOVCHILAR REYTINGI MODALI ================= -->
+  <div id="driver-ranking-modal" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card modal-ranking-card">
+      <div class="modal-header ranking-modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon gold"><i data-lucide="crown"></i></div>
+          <div>
+            <div class="ranking-title-row">
+              <h3>Haydovchilar reytingi</h3>
+              <span class="ranking-month-pill" id="ranking-month-badge">Oktabr 2026</span>
+            </div>
+            <span class="modal-subtitle">Tanlangan mashinada kim ko'p yurganini solishtirish</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body ranking-modal-body">
+        <!-- Mashina tanlash filtri va metama'lumot -->
+        <div class="ranking-filter-box">
+          <div class="ranking-filter-header">
+            <label for="ranking-truck-select" class="ranking-filter-title">
+              <i data-lucide="truck"></i> Solishtirish uchun furani tanlang:
+            </label>
+            <span class="ranking-auto-hint" id="ranking-auto-hint"><i data-lucide="check-circle-2"></i> Faol mashinangiz</span>
+          </div>
+          <div class="ranking-filter-controls">
+            <select id="ranking-truck-select" class="input-control ranking-truck-dropdown">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="ranking-truck-info-strip" id="ranking-truck-info-strip">
+            <!-- Dynamically populated: Jami reyslar, Masofa, Faol haydovchilar -->
+          </div>
+        </div>
+
+        <!-- Top 3 Podium (Oltin, Kumush, Bronza tojlar) -->
+        <div class="ranking-podium-section">
+          <div class="ranking-section-label">
+            <i data-lucide="award"></i> TOP 3 Peshqadam haydovchilar
+          </div>
+          <div class="ranking-podium-grid" id="ranking-podium-grid">
+            <!-- Populated dynamically: 1st Gold Crown, 2nd Silver Crown, 3rd Bronze Crown -->
+          </div>
+        </div>
+
+        <!-- Barcha haydovchilar to'liq jadvali -->
+        <div class="ranking-full-list-section">
+          <div class="ranking-section-label">
+            <i data-lucide="list-ordered"></i> Barcha haydovchilar natijalari
+            <span class="ranking-count-tag" id="ranking-total-drivers-tag">0 ta</span>
+          </div>
+
+          <div class="table-responsive ranking-table-wrap">
+            <div class="table-scroll-hint ranking-scroll-hint">
+              <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
+              <small style="color:var(--text-muted); font-weight:600;">To'liq ma'lumot</small>
+            </div>
+            <table class="data-table ranking-table" id="ranking-full-table">
+              <thead>
+                <tr>
+                  <th style="width: 105px; text-align: center;">O'rin</th>
+                  <th>Haydovchi (F.I.O)</th>
+                  <th style="text-align: center;">Reyslar soni</th>
+                  <th style="text-align: center;">Yurilgan masofa</th>
+                  <th style="text-align: center; min-width: 185px; width: 185px;">Oxirgi reys</th>
+                </tr>
+              </thead>
+              <tbody id="ranking-table-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer ranking-modal-footer">
+        <div class="ranking-footer-note">
+          <i data-lucide="info"></i>
+          <span>Reyting har oyning 1-sanasida avtomatik yangilanadi. Reyslar soni teng bo'lsa, bosib o'tilgan masofa (km) hisobga olinadi.</span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-close-ranking-modal-footer">
+          <i data-lucide="x"></i> Yopish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TEXNIK YORDAM VA DASTURCHI MODALI ================= -->
+  <div id="tech-support-modal" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card support-modal-card">
+      <div class="modal-header support-modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon support-pulse-icon">
+            <i data-lucide="headset"></i>
+          </div>
+          <div>
+            <h3>Texnik Qo'llab-quvvatlash</h3>
+            <span class="modal-subtitle">Dasturiy ta'minot va rasmiy yordam markazi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body support-modal-body">
+        <div class="support-profile-hero">
+          <div class="support-avatar-circle">
+            <i data-lucide="user-cog"></i>
+            <span class="support-online-badge" title="Onlayn"></span>
+          </div>
+          <div class="support-profile-info">
+            <h4 class="support-dev-name">Husanboy Husanboyev</h4>
+            <div class="support-role-tag">
+              <i data-lucide="shield"></i> Tizim arxitektori & IT-mutaxassis
+            </div>
+          </div>
+        </div>
+
+        <div class="support-notice-card">
+          <p>
+            <i data-lucide="info" class="text-primary"></i>
+            Tizimdan foydalanishda savollaringiz bormi, login/parolni tiklash kerakmi yoki yangi funksiya va hamkorlik taklifi bormi? Istalgan vaqtda to'g'ridan-to'g'ri murojaat qilishingiz mumkin.
+          </p>
+        </div>
+
+        <div class="support-channels-list">
+          <a href="https://t.me/khvOO7" target="_blank" rel="noopener noreferrer" class="support-channel-card telegram" id="link-support-tg">
+            <div class="channel-icon">
+              <i data-lucide="send"></i>
+            </div>
+            <div class="channel-info">
+              <span class="channel-title">Telegram orqali bog'lanish</span>
+              <span class="channel-handle">@khvOO7</span>
+            </div>
+            <div class="channel-action">
+              <span>Yozish</span>
+              <i data-lucide="external-link"></i>
+            </div>
+          </a>
+        </div>
+
+        <div class="support-guarantee-note">
+          <i data-lucide="zap" class="text-warning"></i>
+          <span>Tezkor texnik yordam va dasturiy maslahat kafolatlanadi.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-block" id="btn-close-support-footer">
+          <i data-lucide="x"></i> Yopish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SUPERADMIN: FOYDALANUVCHINI TAHRIRLASH MODALI ================= -->
+  <div id="modal-edit-user" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon"><i data-lucide="user-cog" class="text-primary"></i></div>
+          <div>
+            <h3 id="edit-user-modal-title">Foydalanuvchini tahrirlash</h3>
+            <span class="modal-subtitle" id="edit-user-modal-sub">Hisob ma'lumotlari va huquqlarini o'zgartirish</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal" title="Yopish">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <form id="edit-user-form" autocomplete="off">
+        <div class="modal-body">
+          <input type="hidden" id="edit-user-role-val">
+          <input type="hidden" id="edit-user-id-val">
+
+          <div class="form-group mb-3">
+            <label for="edit-user-fullname"><i data-lucide="user"></i> To'liq F.I.O / Nomi *</label>
+            <input type="text" id="edit-user-fullname" class="input-control" required placeholder="F.I.O">
+          </div>
+
+          <div class="form-row-2 mb-3">
+            <div class="form-group">
+              <label for="edit-user-login"><i data-lucide="at-sign"></i> Logini *</label>
+              <input type="text" id="edit-user-login" class="input-control" required placeholder="Login">
+            </div>
+            <div class="form-group">
+              <label for="edit-user-password"><i data-lucide="key"></i> Paroli *</label>
+              <input type="text" id="edit-user-password" class="input-control" required placeholder="Parol">
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="edit-user-phone"><i data-lucide="phone"></i> Telefon raqami</label>
+            <input type="text" id="edit-user-phone" class="input-control" placeholder="+998 90 123 45 67">
+          </div>
+
+          <div class="form-group mb-3" id="edit-user-salary-group">
+            <label for="edit-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi (so'm)</label>
+            <input type="number" id="edit-user-salary" class="input-control" placeholder="2000000" min="0" step="50000">
+            <small class="form-hint" id="edit-user-daily-hint" style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:4px;">Kunlik stavka avtomatik 25 ish kuni asosida hisoblanadi.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-edit-user">Bekor qilish</button>
+          <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> O'zgarishlarni saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= SUPERADMIN: YANGI FOYDALANUVCHI QO'SHISH MODALI ================= -->
+  <div id="modal-add-user" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon"><i data-lucide="user-plus" class="text-success"></i></div>
+          <div>
+            <h3>Yangi foydalanuvchi yaratish</h3>
+            <span class="modal-subtitle">Tizimga yangi xodim, admin yoki kuzatuvchi biriktirish</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-add-user-modal" title="Yopish">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <form id="add-user-form" autocomplete="off">
+        <div class="modal-body">
+          <div class="form-group mb-3">
+            <label for="add-user-role"><i data-lucide="shield"></i> Tizimdagi roli *</label>
+            <select id="add-user-role" class="input-control" required>
+              <option value="driver" selected>Haydovchi (Reyslar va Maosh)</option>
+              <option value="admin">Administrator (Boshqaruv)</option>
+              <option value="viewer">Kuzatuvchi (Monitoring / Faqat ko'rish)</option>
+            </select>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="add-user-fullname"><i data-lucide="user"></i> To'liq F.I.O / Nomi *</label>
+            <input type="text" id="add-user-fullname" class="input-control" required placeholder="Masalan: Jamshid Karimov">
+          </div>
+
+          <div class="form-row-2 mb-3">
+            <div class="form-group">
+              <label for="add-user-login"><i data-lucide="at-sign"></i> Tizimga kirish logini *</label>
+              <input type="text" id="add-user-login" class="input-control" required placeholder="Masalan: jamshid">
+            </div>
+            <div class="form-group">
+              <label for="add-user-password"><i data-lucide="key"></i> Paroli *</label>
+              <input type="text" id="add-user-password" class="input-control" required placeholder="Parol kiriting" minlength="4">
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="add-user-phone"><i data-lucide="phone"></i> Telefon raqami *</label>
+            <input type="text" id="add-user-phone" class="input-control" required placeholder="+998 90 123 45 67">
+          </div>
+
+          <div class="form-group mb-3" id="add-user-salary-group">
+            <label for="add-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi (so'm) *</label>
+            <input type="number" id="add-user-salary" class="input-control" placeholder="2000000" min="0" step="50000" value="2000000">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-add-user">Bekor qilish</button>
+          <button type="submit" class="btn btn-success"><i data-lucide="plus"></i> Foydalanuvchini yaratish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= SUPERADMIN: FOYDALANUVCHINI O'CHIRISH TASDIQLASH MODALI ================= -->
+  <div id="modal-delete-user-confirm" class="modal-overlay" style="display: none;" aria-hidden="true">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header" style="border-bottom-color: rgba(239, 68, 68, 0.2);">
+        <div class="modal-title-group">
+          <div class="modal-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+            <i data-lucide="trash-2"></i>
+          </div>
+          <div>
+            <h3 style="color: #ef4444;">Hisobni o'chirish</h3>
+            <span class="modal-subtitle">Qaytarib bo'lmaydigan amal</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btn-close-delete-user-modal" title="Yopish">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding-top: 1.25rem;">
+        <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.75rem;">
+          Haqiqatan ham <strong id="delete-user-name-display" style="color: var(--primary);">--</strong> nomli <span id="delete-user-role-display" class="badge">--</span> foydalanuvchisini tizimdan butunlay o'chirmoqchimisiz?
+        </p>
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: #ef4444; font-size: 0.85rem;">
+          <i data-lucide="triangle-alert"></i> Ushbu foydalanuvchi tizimga boshqa kira olmaydi va barcha huquqlari darhol bekor qilinadi.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-delete-user">Bekor qilish</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete-user">
+          <i data-lucide="trash-2"></i> Ha, butunlay o'chirilsin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (Compat v10 for vanilla browser JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Config -->
+  <script src="firebase-config.js?v=2.8"></script>
+  <!-- Custom JS -->
+  <script src="app.js?v=4.6"></script>
+</body>
+</html>
