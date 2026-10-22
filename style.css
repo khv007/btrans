@@ -875,6 +875,12 @@ svg.inline-icon {
   box-shadow: 0 0 0 3px var(--primary-glow);
 }
 
+.phone-input-mask {
+  font-family: 'JetBrains Mono', 'Plus Jakarta Sans', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
 /* Date & Month Input Safari and Mobile normalization */
 input[type="month"],
 input[type="date"] {
@@ -2261,6 +2267,7 @@ input[type="number"] {
   justify-content: space-between;
   align-items: center;
   background: var(--bg-surface-secondary);
+  flex-shrink: 0;
 }
 
 .modal-title-group {
@@ -2302,12 +2309,27 @@ input[type="number"] {
   font-size: 1.35rem;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0.4rem 0.6rem;
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border-radius: var(--radius-md);
   transition: var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-close-modal i,
+.btn-close-modal svg {
+  pointer-events: none;
+  display: block;
 }
 
 .btn-close-modal:hover {
@@ -2322,6 +2344,8 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
+  flex: 1;
+  min-height: 0;
 }
 
 /* Modal KPI Cards */
@@ -2455,6 +2479,7 @@ input[type="number"] {
   justify-content: flex-end;
   gap: 1rem;
   background: var(--bg-surface-secondary);
+  flex-shrink: 0;
 }
 
 .modal-footer .btn {
@@ -2463,6 +2488,38 @@ input[type="number"] {
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: var(--radius-md);
+}
+
+/* Modals that wrap body and footer in a <form> element */
+.modal-card > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modal-card > form > .modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.modal-card > form > .modal-footer {
+  flex-shrink: 0;
+}
+
+/* Form sizing inside compact modals (Users, Roles, Settings) */
+.modal-card-user {
+  max-width: 560px !important;
+}
+
+.modal-card-user .modal-body {
+  gap: 1rem;
+}
+
+.modal-card-user .form-group {
+  margin-bottom: 0;
 }
 
 /* ================= FOOTER ================= */
@@ -5299,6 +5356,25 @@ body.is-viewer .editable-input {
   border-color: var(--danger);
   color: var(--danger);
   background: var(--danger-light);
+}
+
+.btn-peek-password svg,
+.btn-table-action svg {
+  pointer-events: none;
+}
+
+/* Users table sticky actions column so buttons are never hidden or clipped */
+.users-table th:last-child,
+.users-table td:last-child {
+  position: sticky;
+  right: 0;
+  background: var(--bg-surface);
+  z-index: 3;
+  box-shadow: -6px 0 10px rgba(0, 0, 0, 0.12);
+}
+
+.users-table tr:hover td:last-child {
+  background: var(--bg-surface-secondary);
 }
 
 .form-row-2 {

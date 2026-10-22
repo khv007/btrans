@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi</title>
-  <meta name="description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
-  
+  <meta name="description"
+    content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+
   <!-- HTTP Cache Invalidation (Forces browsers to always check for updates) -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  
+
   <!-- Standart Favicon & App Nishonlari -->
   <link rel="icon" type="image/x-icon" href="./favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
@@ -24,7 +26,8 @@
   <meta property="og:site_name" content="BOURKHAN TRANS &quot;MCHJ&quot;">
   <meta property="og:url" content="https://bourkhantrans.uz/">
   <meta property="og:title" content="BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi">
-  <meta property="og:description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+  <meta property="og:description"
+    content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
   <meta property="og:image" content="https://bourkhantrans.uz/preview.png">
   <meta property="og:image:secure_url" content="https://bourkhantrans.uz/preview.png">
   <meta property="og:image:type" content="image/png">
@@ -37,7 +40,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://bourkhantrans.uz/">
   <meta name="twitter:title" content="BOURKHAN TRANS - Haydovchilar &amp; Reyslar Ekotizimi">
-  <meta name="twitter:description" content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
+  <meta name="twitter:description"
+    content="Bourkhan Trans logistika firmasi haydovchilari uchun ishga kelib-ketish va kunlik stavka asosida maosh hisoblash tizimi.">
   <meta name="twitter:image" content="https://bourkhantrans.uz/preview.png">
   <meta name="twitter:image:alt" content="BOURKHAN TRANS &quot;MCHJ&quot;">
 
@@ -48,27 +52,26 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
   <meta name="theme-color" content="#4f46e5" id="theme-color-meta">
-  
+
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
+
   <!-- Lucide Icons (Universal Modern SVG Icons) -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-  
+
   <!-- SheetJS for Excel Export -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  
+
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="style.css?v=4.8">
+  <link rel="stylesheet" href="style.css?v=5.1">
 </head>
+
 <body>
 
-  <!-- Maintenance Notice Banner (Texnik Ishlar Banneri) -->
-  <div id="maintenance-banner" class="maintenance-banner" role="alert" style="display: none;">
-    ⚠️ Diqqat! Tizimni yanada yaxshilash ustida ishlayapmiz. Keltirilgan noqulaylik uchun uzr so‘raymiz ⚙️
-  </div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
@@ -106,13 +109,15 @@
       <!-- O'ng tomonda: Barcha boshqaruv tugmalari (Mavzu, Texnik yordam va Foydalanuvchi ma'lumoti) -->
       <div class="header-right-actions">
         <!-- Yorug'/Qorong'i rejim tugmasi -->
-        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Mavzuni almashtirish (Qorong'i / Yorug')" aria-label="Mavzuni almashtirish">
+        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Mavzuni almashtirish (Qorong'i / Yorug')"
+          aria-label="Mavzuni almashtirish">
           <i data-lucide="moon" id="theme-icon"></i>
           <span class="theme-text-label" id="theme-text-label">Dark</span>
         </button>
 
         <!-- Texnik yordam -->
-        <button id="btn-header-support" class="btn-support-pill" type="button" title="Texnik yordam va Dasturchi (@khvOO7)">
+        <button id="btn-header-support" class="btn-support-pill" type="button"
+          title="Texnik yordam va Dasturchi (@khvOO7)">
           <i data-lucide="headset"></i>
           <span class="support-pill-text">Texnik yordam</span>
         </button>
@@ -142,7 +147,8 @@
           <i data-lucide="triangle-alert"></i>
         </div>
         <div class="maintenance-text">
-          <strong>Diqqat!</strong> Tizimni yanada yaxshilash ustida ishlayapmiz. Keltirilgan noqulaylik uchun uzr so‘raymiz ⚙️
+          <strong>Diqqat!</strong> Tizimni yanada yaxshilash ustida ishlayapmiz. Keltirilgan noqulaylik uchun uzr
+          so‘raymiz ⚙️
         </div>
       </div>
     </div>
@@ -167,12 +173,7 @@
                 <i data-lucide="user"></i> Login
               </label>
               <div class="input-wrapper">
-                <input 
-                  type="text" 
-                  id="login-username" 
-                  placeholder="Loginni kiriting" 
-                  required
-                >
+                <input type="text" id="login-username" placeholder="Loginni kiriting" required>
               </div>
             </div>
 
@@ -181,12 +182,7 @@
                 <i data-lucide="lock"></i> Parol
               </label>
               <div class="input-wrapper">
-                <input 
-                  type="password" 
-                  id="login-password" 
-                  placeholder="Parolni kiriting" 
-                  required
-                >
+                <input type="password" id="login-password" placeholder="Parolni kiriting" required>
                 <button type="button" class="toggle-password" id="toggle-password-btn" tabindex="-1">
                   <i data-lucide="eye"></i>
                 </button>
@@ -210,7 +206,7 @@
       <!-- ================= 2. DRIVER VIEW ================= -->
       <section id="driver-section" class="view-section">
         <div class="driver-container">
-          
+
           <!-- Driver Info Card -->
           <div class="driver-hero-card">
             <div class="driver-profile-header">
@@ -221,8 +217,10 @@
                 <span class="meta-greeting">Assalomu alaykum,</span>
                 <h2 id="driver-name" class="driver-title-name">Haydovchi Ismi</h2>
                 <div class="driver-tags">
-                  <span class="tag-truck"><i data-lucide="truck"></i> <strong id="driver-truck">Erkin haydovchi (Reysda tanlanadi)</strong></span>
-                  <span class="tag-phone"><i data-lucide="phone"></i> <span id="driver-phone">+998 -- --- -- --</span></span>
+                  <span class="tag-truck"><i data-lucide="truck"></i> <strong id="driver-truck">Erkin haydovchi (Reysda
+                      tanlanadi)</strong></span>
+                  <span class="tag-phone"><i data-lucide="phone"></i> <span id="driver-phone">+998 -- --- --
+                      --</span></span>
                 </div>
               </div>
             </div>
@@ -281,7 +279,8 @@
                 </div>
               </div>
 
-              <div class="stat-card highlight-ranking" id="driver-ranking-card" role="button" tabindex="0" title="TOP reytingni ochish">
+              <div class="stat-card highlight-ranking" id="driver-ranking-card" role="button" tabindex="0"
+                title="TOP reytingni ochish">
                 <div class="stat-icon gold"><i data-lucide="crown"></i></div>
                 <div class="stat-content">
                   <span class="stat-label">Haydovchilar reytingi</span>
@@ -296,10 +295,13 @@
             <div class="advance-banner-icon"><i data-lucide="coins"></i></div>
             <div class="advance-banner-body">
               <div class="advance-banner-header">
-                <span class="advance-alert-title"><i data-lucide="alert-circle" class="text-danger"></i> Siz avans olgansiz:</span>
+                <span class="advance-alert-title"><i data-lucide="alert-circle" class="text-danger"></i> Siz avans
+                  olgansiz:</span>
                 <strong id="driver-advance-badge-val" class="advance-val-text">-0 so'm</strong>
               </div>
-              <p id="driver-advance-banner-desc" class="advance-banner-desc">Ushbu mablag' oylik maoshingiz hisob-kitobidan chegiriladi. Qoldiq to'lanishi kerak bo'lgan sof maosh: <strong id="driver-advance-net-val">0 so'm</strong></p>
+              <p id="driver-advance-banner-desc" class="advance-banner-desc">Ushbu mablag' oylik maoshingiz
+                hisob-kitobidan chegiriladi. Qoldiq to'lanishi kerak bo'lgan sof maosh: <strong
+                  id="driver-advance-net-val">0 so'm</strong></p>
             </div>
           </div>
 
@@ -329,7 +331,8 @@
 
               <div class="trip-security-notice">
                 <i data-lucide="info"></i>
-                <span><strong>Eslatma:</strong> Reys boshlangandan so'ng xavfsizlik va nazorat talabiga ko'ra kamida <strong>4 soat</strong> davomida reysni tugatish tugmasi qulflanadi.</span>
+                <span><strong>Eslatma:</strong> Reys boshlangandan so'ng xavfsizlik va nazorat talabiga ko'ra kamida
+                  <strong>4 soat</strong> davomida reysni tugatish tugmasi qulflanadi.</span>
               </div>
 
               <div class="trip-setup-sections">
@@ -349,7 +352,8 @@
                     </select>
                   </div>
                   <div id="driver-trip-truck-status" class="truck-select-status-hint empty">
-                    <i data-lucide="pointer"></i> <span>Reysga chiqish uchun ro'yxatdan bo'sh mashinani qo'lda tanlang</span>
+                    <i data-lucide="pointer"></i> <span>Reysga chiqish uchun ro'yxatdan bo'sh mashinani qo'lda
+                      tanlang</span>
                   </div>
                 </div>
 
@@ -363,20 +367,23 @@
 
                   <div class="route-builder-grid">
                     <div class="route-point-box">
-                      <span class="route-point-label"><i data-lucide="circle-dot" class="text-success"></i> Qayerdan (Chiqish):</span>
+                      <span class="route-point-label"><i data-lucide="circle-dot" class="text-success"></i> Qayerdan
+                        (Chiqish):</span>
                       <select id="driver-trip-from" class="input-control route-select-large">
                         <!-- Populated by JS -->
                       </select>
                     </div>
 
                     <div class="route-swap-box">
-                      <button type="button" id="btn-swap-regions" class="btn-swap-route-large" title="Yo'nalishni almashtirish (Masalan: Namangan ⇄ Farg'ona)">
+                      <button type="button" id="btn-swap-regions" class="btn-swap-route-large"
+                        title="Yo'nalishni almashtirish (Masalan: Namangan ⇄ Farg'ona)">
                         <i data-lucide="arrow-left-right"></i>
                       </button>
                     </div>
 
                     <div class="route-point-box">
-                      <span class="route-point-label"><i data-lucide="map-pin" class="text-danger"></i> Qayerga (Borish):</span>
+                      <span class="route-point-label"><i data-lucide="map-pin" class="text-danger"></i> Qayerga
+                        (Borish):</span>
                       <select id="driver-trip-to" class="input-control route-select-large">
                         <!-- Populated by JS -->
                       </select>
@@ -384,19 +391,23 @@
                   </div>
 
                   <!-- Live Route Distance & Min Time Preview -->
-                  <div id="route-distance-preview" class="route-distance-preview" style="margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.88rem;">
+                  <div id="route-distance-preview" class="route-distance-preview"
+                    style="margin-top: 0.85rem; padding: 0.75rem 1rem; border-radius: var(--radius-md); background: var(--bg-surface); border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.88rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                       <i data-lucide="route" class="text-primary"></i>
-                      <span>Yo'nalish masofasi: <strong id="preview-distance-km" style="color: var(--primary);">-- km</strong></span>
+                      <span>Yo'nalish masofasi: <strong id="preview-distance-km" style="color: var(--primary);">--
+                          km</strong></span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.4rem;">
                       <i data-lucide="shield" class="text-warning"></i>
                       <span>Minimal ruxsat vaqti: <strong id="preview-min-time" class="text-warning">--</strong></span>
-                      <small id="preview-min-formula" style="color: var(--text-muted); font-size: 0.75rem;">(70 km/s + 15 daq)</small>
+                      <small id="preview-min-formula" style="color: var(--text-muted); font-size: 0.75rem;">(70 km/s +
+                        15 daq)</small>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.4rem;" id="preview-eta-box">
                       <i data-lucide="clock" class="text-info"></i>
-                      <span>Ruxsat etilish soati: <strong id="preview-unlock-time" class="text-info">--:--</strong></span>
+                      <span>Ruxsat etilish soati: <strong id="preview-unlock-time"
+                          class="text-info">--:--</strong></span>
                     </div>
                   </div>
                 </div>
@@ -475,8 +486,11 @@
 
                 <div class="trip-lock-stats">
                   <span id="trip-elapsed-display"><i data-lucide="timer"></i> Boshlanganiga: 0 daqiqa</span>
-                  <span id="trip-unlock-clock-display" style="font-size:0.82rem; color:var(--text-muted);"><i data-lucide="clock" class="text-warning"></i> Ruxsat: <strong id="trip-unlock-clock-val" class="text-warning">--:--</strong></span>
-                  <span id="trip-status-display" class="lock-status-badge locked"><i data-lucide="lock"></i> Tugatish qulflangan</span>
+                  <span id="trip-unlock-clock-display" style="font-size:0.82rem; color:var(--text-muted);"><i
+                      data-lucide="clock" class="text-warning"></i> Ruxsat: <strong id="trip-unlock-clock-val"
+                      class="text-warning">--:--</strong></span>
+                  <span id="trip-status-display" class="lock-status-badge locked"><i data-lucide="lock"></i> Tugatish
+                    qulflangan</span>
                 </div>
               </div>
             </div>
@@ -484,7 +498,8 @@
             <!-- Shift times box -->
             <div class="shift-times-box" id="shift-times-box">
               <div class="time-item">
-                <span class="time-label"><i data-lucide="briefcase" class="text-success"></i> Ish boshlangan vaqt:</span>
+                <span class="time-label"><i data-lucide="briefcase" class="text-success"></i> Ish boshlangan
+                  vaqt:</span>
                 <span class="time-value" id="today-shift-start-display">--:--:--</span>
                 <span class="time-date" id="today-shift-date"><i data-lucide="calendar-days"></i> Sana: --</span>
               </div>
@@ -509,13 +524,8 @@
             <!-- Big Action Buttons -->
             <div class="action-buttons-wrapper" id="driver-actions-container">
               <!-- 1. Start Shift (Ishni boshlash) -->
-              <button 
-                type="button"
-                id="btn-start-shift" 
-                class="btn-big btn-start-shift" 
-                title="Bugungi ish kunini ochish"
-                style="display: none;"
-              >
+              <button type="button" id="btn-start-shift" class="btn-big btn-start-shift"
+                title="Bugungi ish kunini ochish" style="display: none;">
                 <div class="btn-big-icon">
                   <i data-lucide="play"></i>
                 </div>
@@ -526,13 +536,8 @@
               </button>
 
               <!-- 2. Start Trip (Reysni boshlash) -->
-              <button 
-                type="button"
-                id="btn-start-trip" 
-                class="btn-big btn-checkin" 
-                title="Yangi reysga yo'lga chiqish"
-                style="display: none;"
-              >
+              <button type="button" id="btn-start-trip" class="btn-big btn-checkin" title="Yangi reysga yo'lga chiqish"
+                style="display: none;">
                 <div class="btn-big-icon">
                   <i data-lucide="play"></i>
                 </div>
@@ -543,13 +548,8 @@
               </button>
 
               <!-- 3. Finish Trip (Reysni yakunlash) -->
-              <button 
-                type="button"
-                id="btn-finish-trip" 
-                class="btn-big btn-checkout" 
-                title="Hozirgi reysni yakunlash (Minimal ruxsat vaqti o'tishi kerak)"
-                style="display: none;"
-              >
+              <button type="button" id="btn-finish-trip" class="btn-big btn-checkout"
+                title="Hozirgi reysni yakunlash (Minimal ruxsat vaqti o'tishi kerak)" style="display: none;">
                 <div class="btn-big-icon">
                   <i data-lucide="check-circle-2" id="btn-finish-trip-icon"></i>
                 </div>
@@ -560,19 +560,15 @@
               </button>
 
               <!-- 4. End Shift (Ishni yakunlash) - Side-by-side with Start Trip after completing a trip -->
-              <button 
-                type="button"
-                id="btn-end-shift" 
-                class="btn-big btn-end-shift" 
-                title="Bugungi ish kunini to'liq yakunlash"
-                style="display: none;"
-              >
+              <button type="button" id="btn-end-shift" class="btn-big btn-end-shift"
+                title="Bugungi ish kunini to'liq yakunlash" style="display: none;">
                 <div class="btn-big-icon">
                   <i data-lucide="power"></i>
                 </div>
                 <div class="btn-big-content">
                   <span class="btn-big-title" id="btn-end-shift-title">Ishni yakunlash</span>
-                  <span class="btn-big-sub" id="btn-end-shift-sub">Bugungi ish kunini tugatish va kunlik stavkani olish</span>
+                  <span class="btn-big-sub" id="btn-end-shift-sub">Bugungi ish kunini tugatish va kunlik stavkani
+                    olish</span>
                 </div>
               </button>
             </div>
@@ -582,7 +578,9 @@
               <div class="alert-icon"><i data-lucide="check-circle-2"></i></div>
               <div class="alert-body">
                 <h4 id="alert-completed-title">Bugungi ish kuni to'liq yakunlandi!</h4>
-                <p id="alert-completed-desc">Bugun barcha reyslar muvaffaqiyatli bajarildi. Ushbu ish kuni uchun 1 kunlik stavka (<strong id="alert-credited-amount">0 so'm</strong>) hisoblangan maoshingizga qo'shildi. Dam oling!</p>
+                <p id="alert-completed-desc">Bugun barcha reyslar muvaffaqiyatli bajarildi. Ushbu ish kuni uchun 1
+                  kunlik stavka (<strong id="alert-credited-amount">0 so'm</strong>) hisoblangan maoshingizga qo'shildi.
+                  Dam oling!</p>
               </div>
             </div>
           </div>
@@ -656,19 +654,21 @@
       <!-- ================= 3. ADMIN VIEW ================= -->
       <section id="admin-section" class="view-section">
         <div class="admin-container">
-          
+
           <!-- Viewer Read-Only Mode Banner -->
           <div id="viewer-alert-banner" class="viewer-alert-banner" style="display: none;">
             <div class="viewer-alert-icon"><i data-lucide="eye"></i></div>
             <div class="viewer-alert-content">
               <div class="viewer-alert-title"><i data-lucide="shield"></i> KUZATUVCHI (FAQAT KO'RISH) REJIMI FAOL</div>
-              <p class="viewer-alert-desc">Siz tizimni to'liq kuzatish rejimidasiz. Barcha haydovchilar, reyslar, maoshlar, avanslar va hisob ma'lumotlarini to'liq ko'rishingiz mumkin. Ma'lumotlarni tahrirlash, o'chirish yoki o'zgartirish huquqi cheklangan.</p>
+              <p class="viewer-alert-desc">Siz tizimni to'liq kuzatish rejimidasiz. Barcha haydovchilar, reyslar,
+                maoshlar, avanslar va hisob ma'lumotlarini to'liq ko'rishingiz mumkin. Ma'lumotlarni tahrirlash,
+                o'chirish yoki o'zgartirish huquqi cheklangan.</p>
             </div>
           </div>
 
 
 
-           <!-- Admin Dashboard Stats -->
+          <!-- Admin Dashboard Stats -->
           <div class="admin-stats-grid">
             <div class="stat-card">
               <div class="stat-icon purple"><i data-lucide="users"></i></div>
@@ -691,7 +691,9 @@
               <div class="stat-content">
                 <span class="stat-label">Bugun ishda (Smenada)</span>
                 <strong class="stat-val text-primary" id="admin-stat-today-active">0 nafar</strong>
-                <small id="admin-stat-active-breakdown" style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Reysda: 0 &bull; Kutmoqda: 0</small>
+                <small id="admin-stat-active-breakdown"
+                  style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Reysda: 0 &bull;
+                  Kutmoqda: 0</small>
               </div>
             </div>
 
@@ -700,7 +702,8 @@
               <div class="stat-content">
                 <span class="stat-label">Dam olganlar (Bugun)</span>
                 <strong class="stat-val text-warning" id="admin-stat-today-finished">0 nafar</strong>
-                <small style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Smena ochmagan</small>
+                <small style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Smena
+                  ochmagan</small>
               </div>
             </div>
 
@@ -709,7 +712,9 @@
               <div class="stat-content">
                 <span class="stat-label">Mashinalar parki</span>
                 <strong class="stat-val text-info" id="admin-stat-total-trucks">0 ta</strong>
-                <small id="admin-stat-trucks-breakdown" style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Band: 0 &bull; Bo'sh: 0</small>
+                <small id="admin-stat-trucks-breakdown"
+                  style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:2px;">Band: 0 &bull;
+                  Bo'sh: 0</small>
               </div>
             </div>
 
@@ -729,7 +734,8 @@
               </div>
             </div>
 
-            <div class="stat-card highlight-ranking" id="admin-ranking-card" role="button" tabindex="0" title="TOP reytingni ochish">
+            <div class="stat-card highlight-ranking" id="admin-ranking-card" role="button" tabindex="0"
+              title="TOP reytingni ochish">
               <div class="stat-icon gold"><i data-lucide="crown"></i></div>
               <div class="stat-content">
                 <span class="stat-label">Haydovchilar reytingi</span>
@@ -772,7 +778,8 @@
               <i data-lucide="database" class="text-warning"></i>
               <span>Ma'lumotlar bazasi</span>
             </button>
-            <button class="tab-btn superadmin-tab-btn" data-tab="tab-users-management" id="tab-btn-users-management" style="display: none;">
+            <button class="tab-btn superadmin-tab-btn" data-tab="tab-users-management" id="tab-btn-users-management"
+              style="display: none;">
               <i data-lucide="crown" class="text-warning"></i>
               <span>Rollar Boshqaruvi</span>
             </button>
@@ -784,9 +791,10 @@
               <div class="panel-card-header">
                 <div class="panel-title-group">
                   <h3><i data-lucide="list"></i> Barcha haydovchilarning reyslar va davomat hisoboti</h3>
-                  <p class="panel-subtitle">Kunlik reyslar, marshrutlar (12 viloyat), mashinalar va kunlik stavkalar monitoringi</p>
+                  <p class="panel-subtitle">Kunlik reyslar, marshrutlar (12 viloyat), mashinalar va kunlik stavkalar
+                    monitoringi</p>
                 </div>
-                
+
                 <!-- Action Controls: Filter, Avans & Export -->
                 <div class="panel-actions-group">
                   <div class="filter-item">
@@ -796,7 +804,8 @@
 
                   <div class="filter-item">
                     <label for="search-attendance"><i data-lucide="search"></i> Qidiruv:</label>
-                    <input type="text" id="search-attendance" class="input-control" placeholder="F.I.O, Mashina, Marshrut...">
+                    <input type="text" id="search-attendance" class="input-control"
+                      placeholder="F.I.O, Mashina, Marshrut...">
                   </div>
 
                   <button id="btn-export-excel" class="btn btn-success">
@@ -807,10 +816,14 @@
 
               <!-- Quick Filter Chips -->
               <div class="attendance-filter-chips" id="attendance-filter-chips">
-                <button type="button" class="filter-chip active" data-filter="all"><i data-lucide="list"></i> Barchasi</button>
-                <button type="button" class="filter-chip" data-filter="in_progress"><span class="chip-dot pulse"></span> Yo'lda (Reysda)</button>
-                <button type="button" class="filter-chip" data-filter="completed"><i data-lucide="check-circle-2" class="text-success"></i> Tugatilgan</button>
-                <button type="button" class="filter-chip" data-filter="today"><i data-lucide="calendar" class="text-primary"></i> Faqat bugun</button>
+                <button type="button" class="filter-chip active" data-filter="all"><i data-lucide="list"></i>
+                  Barchasi</button>
+                <button type="button" class="filter-chip" data-filter="in_progress"><span class="chip-dot pulse"></span>
+                  Yo'lda (Reysda)</button>
+                <button type="button" class="filter-chip" data-filter="completed"><i data-lucide="check-circle-2"
+                    class="text-success"></i> Tugatilgan</button>
+                <button type="button" class="filter-chip" data-filter="today"><i data-lucide="calendar"
+                    class="text-primary"></i> Faqat bugun</button>
               </div>
 
               <!-- Driver Monthly Summary Mini-Cards -->
@@ -822,7 +835,8 @@
               <div class="table-responsive">
                 <div class="table-scroll-hint">
                   <span><i data-lucide="arrow-left-right" class="text-primary"></i> Jadvalni gorizontal suring</span>
-                  <small id="table-total-count-hint" style="color:var(--text-muted); font-weight:600;">Jami: 0 ta reys</small>
+                  <small id="table-total-count-hint" style="color:var(--text-muted); font-weight:600;">Jami: 0 ta
+                    reys</small>
                 </div>
                 <table class="data-table" id="admin-attendance-table">
                   <thead>
@@ -857,7 +871,8 @@
               <div class="panel-card-header">
                 <div class="panel-title-group">
                   <h3><i data-lucide="contact"></i> Haydovchilar ro'yxati va ma'lumotlari</h3>
-                  <p class="panel-subtitle">Barcha ro'yxatdan o'tgan haydovchilar, ularning oylik stavkasi, olingan avanslari va sof qoldig'i</p>
+                  <p class="panel-subtitle">Barcha ro'yxatdan o'tgan haydovchilar, ularning oylik stavkasi, olingan
+                    avanslari va sof qoldig'i</p>
                 </div>
               </div>
 
@@ -878,7 +893,8 @@
                       <th class="col-driver-earned">To'plangan maosh</th>
                       <th class="col-driver-advance">Olingan avans</th>
                       <th class="col-driver-net">To'lanadigan qoldiq</th>
-                      <th class="col-driver-auth"><span class="th-admin-label">Login / Parol</span><span class="th-viewer-label">Login</span></th>
+                      <th class="col-driver-auth"><span class="th-admin-label">Login / Parol</span><span
+                          class="th-viewer-label">Login</span></th>
                       <th>Harakatlar</th>
                     </tr>
                   </thead>
@@ -897,8 +913,10 @@
             <div class="panel-card">
               <div class="panel-card-header">
                 <div class="panel-title-group">
-                  <h3><i data-lucide="truck" class="text-primary"></i> Mashinalar parki (Moshina rusumi va davlat raqami)</h3>
-                  <p class="panel-subtitle">Admin yangi mashinalarni qo'shadi, haydovchilar esa reysga chiqishdan oldin mashinani tanlaydi</p>
+                  <h3><i data-lucide="truck" class="text-primary"></i> Mashinalar parki (Moshina rusumi va davlat
+                    raqami)</h3>
+                  <p class="panel-subtitle">Admin yangi mashinalarni qo'shadi, haydovchilar esa reysga chiqishdan oldin
+                    mashinani tanlaydi</p>
                 </div>
               </div>
 
@@ -907,11 +925,13 @@
                 <div class="form-row">
                   <div class="form-group col-5">
                     <label for="new-truck-name"><i data-lucide="truck"></i> Mashina nomi / rusumi *</label>
-                    <input type="text" id="new-truck-name" class="input-control" placeholder="Masalan: Volvo FH 500, MAN TGX, Isuzu..." required>
+                    <input type="text" id="new-truck-name" class="input-control"
+                      placeholder="Masalan: Volvo FH 500, MAN TGX, Isuzu..." required>
                   </div>
                   <div class="form-group col-4">
                     <label for="new-truck-plate"><i data-lucide="barcode"></i> Davlat raqami *</label>
-                    <input type="text" id="new-truck-plate" class="input-control" placeholder="Masalan: 01 A 777 AA" required>
+                    <input type="text" id="new-truck-plate" class="input-control" placeholder="Masalan: 01 A 777 AA"
+                      required>
                   </div>
                   <div class="form-group col-3 form-btn-align">
                     <button type="submit" class="btn btn-primary btn-block">
@@ -953,7 +973,8 @@
               <div class="panel-card-header">
                 <div class="panel-title-group">
                   <h3><i data-lucide="coins" class="text-warning"></i> Haydovchilarga avans berish va hisobi</h3>
-                  <p class="panel-subtitle">Haydovchiga avans berilganda, u haydovchining kabinetida avans sifatida ko'rinadi va maoshidan chegiriladi</p>
+                  <p class="panel-subtitle">Haydovchiga avans berilganda, u haydovchining kabinetida avans sifatida
+                    ko'rinadi va maoshidan chegiriladi</p>
                 </div>
               </div>
 
@@ -969,12 +990,14 @@
 
                   <div class="form-group col-4">
                     <label for="advance-amount-input"><i data-lucide="banknote"></i> Avans summasi (so'm) *</label>
-                    <input type="number" id="advance-amount-input" class="input-control" placeholder="Masalan: 500000" min="10000" step="10000" required>
+                    <input type="number" id="advance-amount-input" class="input-control" placeholder="Masalan: 500000"
+                      min="10000" step="10000" required>
                   </div>
 
                   <div class="form-group col-4">
                     <label for="advance-comment-input"><i data-lucide="message-square"></i> Izoh / Maqsad</label>
-                    <input type="text" id="advance-comment-input" class="input-control" placeholder="Yo'l xarajati, yoqilg'i uchun...">
+                    <input type="text" id="advance-comment-input" class="input-control"
+                      placeholder="Yo'l xarajati, yoqilg'i uchun...">
                   </div>
                 </div>
 
@@ -1020,10 +1043,12 @@
             <div class="panel-card">
               <div class="panel-card-header salary-payout-header">
                 <div class="panel-title-group">
-                  <h3><i data-lucide="banknote" class="text-success"></i> Haydovchilarga oylik berish va qoldiqlar hisobi</h3>
-                  <p class="panel-subtitle">Xodimlarga oylik to'lash, olingan avanslarni chegirish va ortiqcha/kam berilgan summani yangi oyga avtomatik o'tkazish</p>
+                  <h3><i data-lucide="banknote" class="text-success"></i> Haydovchilarga oylik berish va qoldiqlar
+                    hisobi</h3>
+                  <p class="panel-subtitle">Xodimlarga oylik to'lash, olingan avanslarni chegirish va ortiqcha/kam
+                    berilgan summani yangi oyga avtomatik o'tkazish</p>
                 </div>
-                
+
                 <!-- Quick Month Filter and Actions -->
                 <div class="salary-payout-header-actions">
                   <div class="month-picker-pill">
@@ -1031,7 +1056,8 @@
                     <label for="salary-payout-month">Hisob oyi:</label>
                     <input type="month" id="salary-payout-month" class="custom-month-input">
                   </div>
-                  <button type="button" id="btn-refresh-salary-payout" class="btn btn-secondary btn-sm" title="Jadvalni yangilash">
+                  <button type="button" id="btn-refresh-salary-payout" class="btn btn-secondary btn-sm"
+                    title="Jadvalni yangilash">
                     <i data-lucide="rotate-ccw"></i> Yangilash
                   </button>
                 </div>
@@ -1073,7 +1099,8 @@
               <div class="salary-search-bar">
                 <div class="input-with-icon salary-search-box">
                   <i data-lucide="search"></i>
-                  <input type="text" id="search-salary-driver" class="input-control" placeholder="Haydovchini ismi yoki familiyasi bo'yicha qidirish...">
+                  <input type="text" id="search-salary-driver" class="input-control"
+                    placeholder="Haydovchini ismi yoki familiyasi bo'yicha qidirish...">
                 </div>
                 <div class="salary-sort-hint">
                   <i data-lucide="arrow-down-a-z" class="text-primary"></i>
@@ -1115,7 +1142,8 @@
               <div class="panel-card-header">
                 <div class="panel-title-group">
                   <h3><i data-lucide="user-plus" class="text-primary"></i> Yangi haydovchi qo'shish</h3>
-                  <p class="panel-subtitle">Haydovchiga tizimga kirishi uchun login va parol bering (Mashina reys paytida erkin tanlanadi)</p>
+                  <p class="panel-subtitle">Haydovchiga tizimga kirishi uchun login va parol bering (Mashina reys
+                    paytida erkin tanlanadi)</p>
                 </div>
               </div>
 
@@ -1123,19 +1151,23 @@
                 <div class="form-row">
                   <div class="form-group col-12">
                     <label for="new-driver-name"><i data-lucide="user"></i> Haydovchi F.I.O *</label>
-                    <input type="text" id="new-driver-name" class="input-control" placeholder="Masalan: Azizbek Karimov" required>
+                    <input type="text" id="new-driver-name" class="input-control" placeholder="Masalan: Azizbek Karimov"
+                      required>
                   </div>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group col-6">
                     <label for="new-driver-phone"><i data-lucide="phone"></i> Telefon raqami *</label>
-                    <input type="tel" id="new-driver-phone" class="input-control" placeholder="+998 90 123 45 67" required>
+                    <input type="tel" id="new-driver-phone" class="input-control phone-input-mask" value="+998 "
+                      maxlength="17" placeholder="+998 90 123 45 67" required autocomplete="tel">
                   </div>
 
                   <div class="form-group col-6">
-                    <label for="new-driver-salary"><i data-lucide="banknote"></i> Belgilangan oylik maoshi (so'mda) *</label>
-                    <input type="number" id="new-driver-salary" class="input-control" placeholder="Masalan: 12000000" min="100000" step="50000" required>
+                    <label for="new-driver-salary"><i data-lucide="banknote"></i> Belgilangan oylik maoshi (so'mda)
+                      *</label>
+                    <input type="number" id="new-driver-salary" class="input-control" placeholder="Masalan: 12000000"
+                      min="100000" step="50000" required>
                     <small class="field-hint" id="salary-preview-hint">Kunlik stavka taxminan: 0 so'm / kun</small>
                   </div>
                 </div>
@@ -1148,7 +1180,8 @@
 
                   <div class="form-group col-6">
                     <label for="new-driver-password"><i data-lucide="key"></i> Kirish paroli *</label>
-                    <input type="text" id="new-driver-password" class="input-control" placeholder="Parol (masalan: 1234)" required>
+                    <input type="text" id="new-driver-password" class="input-control"
+                      placeholder="Parol (masalan: 1234)" required>
                   </div>
                 </div>
 
@@ -1170,7 +1203,8 @@
 
               <!-- Kuzatuvchi Uchun Shaxsiy Sozlamalar (Faqat Kuzatuvchi rejimida ko'rinadi) -->
               <div id="viewer-settings-panel" class="viewer-settings-panel" style="display: none;">
-                <div class="panel-card-header" style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem;">
+                <div class="panel-card-header"
+                  style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem;">
                   <div class="panel-title-group">
                     <h3 style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
                       <i data-lucide="user-cog" class="text-info"></i> Kuzatuvchi hisob sozlamalari
@@ -1182,34 +1216,46 @@
                 <form id="viewer-self-settings-form" class="admin-form" autocomplete="off">
                   <div class="form-group">
                     <label for="viewer-self-login"><i data-lucide="user"></i> Kuzatuvchi logini *</label>
-                    <input type="text" id="viewer-self-login" class="input-control" placeholder="Husanboy" value="Husanboy" required minlength="3">
+                    <input type="text" id="viewer-self-login" class="input-control" placeholder="Husanboy"
+                      value="Husanboy" required minlength="3">
                   </div>
 
                   <div class="form-group">
                     <label for="viewer-self-password"><i data-lucide="key"></i> Yangi parol *</label>
                     <div class="input-wrapper" style="position: relative;">
-                      <input type="password" id="viewer-self-password" class="input-control" placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
-                      <button type="button" class="toggle-password" id="toggle-viewer-self-pass" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                      <input type="password" id="viewer-self-password" class="input-control"
+                        placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
+                      <button type="button" class="toggle-password" id="toggle-viewer-self-pass"
+                        style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;"
+                        tabindex="-1">
                         <i data-lucide="eye"></i>
                       </button>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="viewer-self-confirm-password"><i data-lucide="check-circle-2"></i> Yangi parolni tasdiqlash *</label>
+                    <label for="viewer-self-confirm-password"><i data-lucide="check-circle-2"></i> Yangi parolni
+                      tasdiqlash *</label>
                     <div class="input-wrapper" style="position: relative;">
-                      <input type="password" id="viewer-self-confirm-password" class="input-control" placeholder="Yangi parolni qayta kiriting" required minlength="4">
-                      <button type="button" class="toggle-password" id="toggle-viewer-self-confirm" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                      <input type="password" id="viewer-self-confirm-password" class="input-control"
+                        placeholder="Yangi parolni qayta kiriting" required minlength="4">
+                      <button type="button" class="toggle-password" id="toggle-viewer-self-confirm"
+                        style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;"
+                        tabindex="-1">
                         <i data-lucide="eye"></i>
                       </button>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="viewer-secret-code"><i data-lucide="shield" class="text-warning"></i> Maxfiy tasdiqlash kodi *</label>
+                    <label for="viewer-secret-code"><i data-lucide="shield" class="text-warning"></i> Maxfiy tasdiqlash
+                      kodi *</label>
                     <div class="input-wrapper" style="position: relative;">
-                      <input type="password" id="viewer-secret-code" class="input-control" placeholder="Maxfiy kodni kiriting" required autocomplete="off">
-                      <button type="button" class="toggle-password" id="toggle-viewer-secret-code" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1" title="Kodni ko'rsatish/yashirish">
+                      <input type="password" id="viewer-secret-code" class="input-control"
+                        placeholder="Maxfiy kodni kiriting" required autocomplete="off">
+                      <button type="button" class="toggle-password" id="toggle-viewer-secret-code"
+                        style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;"
+                        tabindex="-1" title="Kodni ko'rsatish/yashirish">
                         <i data-lucide="eye"></i>
                       </button>
                     </div>
@@ -1238,17 +1284,21 @@
                 <form id="change-admin-password-form" class="admin-form" autocomplete="off">
                   <div class="form-group">
                     <label for="admin-current-pass"><i data-lucide="lock"></i> Hozirgi parol *</label>
-                    <input type="password" id="admin-current-pass" class="input-control" placeholder="Hozirgi parolingiz" required>
+                    <input type="password" id="admin-current-pass" class="input-control"
+                      placeholder="Hozirgi parolingiz" required>
                   </div>
 
                   <div class="form-group">
                     <label for="admin-new-pass"><i data-lucide="lock-open"></i> Yangi parol *</label>
-                    <input type="password" id="admin-new-pass" class="input-control" placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
+                    <input type="password" id="admin-new-pass" class="input-control"
+                      placeholder="Yangi parol (kamida 4 ta belgi)" required minlength="4">
                   </div>
 
                   <div class="form-group">
-                    <label for="admin-confirm-pass"><i data-lucide="check-circle-2"></i> Yangi parolni tasdiqlash *</label>
-                    <input type="password" id="admin-confirm-pass" class="input-control" placeholder="Yangi parolni qayta kiriting" required minlength="4">
+                    <label for="admin-confirm-pass"><i data-lucide="check-circle-2"></i> Yangi parolni tasdiqlash
+                      *</label>
+                    <input type="password" id="admin-confirm-pass" class="input-control"
+                      placeholder="Yangi parolni qayta kiriting" required minlength="4">
                   </div>
 
                   <div class="form-actions" style="margin-top: 1.5rem; margin-bottom: 2rem;">
@@ -1258,7 +1308,7 @@
                   </div>
                 </form>
 
-              <!-- End of admin-settings-panel -->
+                <!-- End of admin-settings-panel -->
               </div>
             </div>
           </div>
@@ -1277,7 +1327,8 @@
                   </div>
                   <h3 class="dev-lockout-title">Kirish Vaqtincha Cheklandi</h3>
                   <p class="dev-lockout-desc">
-                    Xavfsizlik maqsadida 3 marta ketma-ket noto'g'ri maxfiy kod kiritilgani sababli Ma'lumotlar bazasiga kirish bloklandi.
+                    Xavfsizlik maqsadida 3 marta ketma-ket noto'g'ri maxfiy kod kiritilgani sababli Ma'lumotlar bazasiga
+                    kirish bloklandi.
                   </p>
                   <div class="dev-lockout-timer-box">
                     <span class="timer-label"><i data-lucide="clock"></i> Blokdan chiqishgacha qolgan vaqt:</span>
@@ -1293,7 +1344,8 @@
                   </div>
                   <h3 class="dev-gate-title">Dasturchi Xavfsizlik Qulfi</h3>
                   <p class="dev-gate-desc">
-                    Ushbu bo'lim faqat tizim dasturchisi (texnik ma'mur) uchun mo'ljallangan. Ma'lumotlar bazasi va Firebase sozlamalariga kirish uchun maxfiy xavfsizlik kodini kiriting.
+                    Ushbu bo'lim faqat tizim dasturchisi (texnik ma'mur) uchun mo'ljallangan. Ma'lumotlar bazasi va
+                    Firebase sozlamalariga kirish uchun maxfiy xavfsizlik kodini kiriting.
                   </p>
 
                   <!-- Noto'g'ri urinishlar haqida ogohlantirish -->
@@ -1306,8 +1358,11 @@
                     <div class="form-group">
                       <label for="dev-secret-code"><i data-lucide="key"></i> Maxsus xavfsizlik kodi *</label>
                       <div class="input-wrapper" style="position: relative;">
-                        <input type="password" id="dev-secret-code" class="input-control" placeholder="Maxfiy kodni kiriting" required maxlength="30" autofocus>
-                        <button type="button" class="toggle-password" id="toggle-dev-secret-code" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1">
+                        <input type="password" id="dev-secret-code" class="input-control"
+                          placeholder="Maxfiy kodni kiriting" required maxlength="30" autofocus>
+                        <button type="button" class="toggle-password" id="toggle-dev-secret-code"
+                          style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;"
+                          tabindex="-1">
                           <i data-lucide="eye"></i>
                         </button>
                       </div>
@@ -1323,35 +1378,46 @@
 
               <!-- Dasturchi Ochiq Kontenti (Faqat to'g'ri kod terilganda ko'rinadi) -->
               <div id="dev-database-content" style="display: none;">
-                <div class="dev-unlocked-banner" style="display: flex; justify-content: space-between; align-items: center; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
-                  <div style="display: flex; align-items: center; gap: 0.65rem; color: #10b981; font-weight: 700; font-size: 0.92rem;">
+                <div class="dev-unlocked-banner"
+                  style="display: flex; justify-content: space-between; align-items: center; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                  <div
+                    style="display: flex; align-items: center; gap: 0.65rem; color: #10b981; font-weight: 700; font-size: 0.92rem;">
                     <i data-lucide="shield-check" style="width: 1.25rem; height: 1.25rem;"></i>
                     <span>Dasturchi rejimi faol (Baza boshqaruvi ochildi)</span>
                   </div>
-                  <button type="button" class="btn btn-outline btn-sm" id="btn-lock-dev" title="Bo'limni qayta qulflash">
+                  <button type="button" class="btn btn-outline btn-sm" id="btn-lock-dev"
+                    title="Bo'limni qayta qulflash">
                     <i data-lucide="lock"></i> Qulflash (Chiqish)
                   </button>
                 </div>
 
                 <!-- Cloud Database (Firebase Firestore) Management -->
-                <div class="cloud-db-box" style="background: var(--bg-surface-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-                    <h4 style="font-size: 0.95rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <div class="cloud-db-box"
+                  style="background: var(--bg-surface-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+                  <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h4
+                      style="font-size: 0.95rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
                       <i data-lucide="cloud" class="text-primary"></i> Markaziy Bulutli Baza (Firebase Firestore)
                     </h4>
-                    <span id="cloud-status-badge" class="badge" style="padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.35rem; background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);">
+                    <span id="cloud-status-badge" class="badge"
+                      style="padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 0.35rem; background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);">
                       <i data-lucide="loader-2" class="animate-spin"></i> Tekshirilmoqda...
                     </span>
                   </div>
                   <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;">
-                    Barcha IP manzillar, kompyuterlar va haydovchilar telefonidan bir vaqtda kirib ishlashi uchun Firebase ma'lumotlar bazasi ulanishi lozim.
+                    Barcha IP manzillar, kompyuterlar va haydovchilar telefonidan bir vaqtda kirib ishlashi uchun
+                    Firebase ma'lumotlar bazasi ulanishi lozim.
                   </p>
 
                   <form id="firebase-config-form" autocomplete="off">
                     <div class="form-group" style="margin-bottom: 0.75rem;">
-                      <label for="firebase-config-json" style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                      <label for="firebase-config-json"
+                        style="font-size: 0.82rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
                         <span><i data-lucide="code"></i> Firebase Config sozlamalari (JSON formatida)</span>
-                        <a href="https://console.firebase.google.com/" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline; font-size: 0.78rem;">Firebase konsoliga o'tish &nearr;</a>
+                        <a href="https://console.firebase.google.com/" target="_blank" rel="noopener"
+                          style="color: var(--primary); text-decoration: underline; font-size: 0.78rem;">Firebase
+                          konsoliga o'tish &nearr;</a>
                       </label>
                       <textarea id="firebase-config-json" class="input-control" rows="5" placeholder='{
   "apiKey": "AIzaSy...",
@@ -1367,10 +1433,12 @@
                       <button type="submit" class="btn btn-primary" id="btn-save-firebase">
                         <i data-lucide="cloud-upload"></i> Saqlash va ulanish
                       </button>
-                      <button type="button" class="btn btn-secondary" id="btn-sync-to-cloud" title="Hozirgi brauzerdagi ma'lumotlarni bulutli bazaga yozish">
+                      <button type="button" class="btn btn-secondary" id="btn-sync-to-cloud"
+                        title="Hozirgi brauzerdagi ma'lumotlarni bulutli bazaga yozish">
                         <i data-lucide="refresh-cw"></i> Hozirgi ma'lumotlarni Bulutga yuklash
                       </button>
-                      <button type="button" class="btn btn-danger-outline" id="btn-disconnect-firebase" style="display: none;">
+                      <button type="button" class="btn btn-danger-outline" id="btn-disconnect-firebase"
+                        style="display: none;">
                         <i data-lucide="unlink"></i> Uzish
                       </button>
                     </div>
@@ -1387,7 +1455,8 @@
                     <button type="button" id="btn-export-backup" class="btn btn-outline">
                       <i data-lucide="download"></i> Zaxira nusxasini yuklab olish (.json)
                     </button>
-                    <button type="button" id="btn-import-backup" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
+                    <button type="button" id="btn-import-backup" class="btn btn-outline"
+                      style="border-color: var(--primary); color: var(--primary);">
                       <i data-lucide="upload"></i> Zaxirani qayta tiklash (.json)
                     </button>
                     <input type="file" id="input-import-backup" accept=".json,application/json" style="display: none;">
@@ -1407,7 +1476,8 @@
               <div class="panel-card-header">
                 <div class="panel-title-group">
                   <h3><i data-lucide="crown" class="text-warning"></i> Tizim Rollari va Foydalanuvchilar Boshqaruvi</h3>
-                  <p class="panel-subtitle">Barcha administratorlar, kuzatuvchi va haydovchilar hisoblari, login, parol, telefon va maoshlarini to'liq nazorat qilish</p>
+                  <p class="panel-subtitle">Barcha administratorlar, kuzatuvchi va haydovchilar hisoblari, login, parol,
+                    telefon va maoshlarini to'liq nazorat qilish</p>
                 </div>
                 <div class="panel-actions-group">
                   <button type="button" class="btn btn-primary" id="btn-open-add-user-modal">
@@ -1451,15 +1521,20 @@
               <!-- Filter & Search Toolbar -->
               <div class="users-filter-toolbar">
                 <div class="role-filter-pills" id="users-role-filter-group">
-                  <button type="button" class="role-pill active" data-filter="all">Barchasi (<span id="count-pill-all">0</span>)</button>
-                  <button type="button" class="role-pill" data-filter="admin">Adminlar (<span id="count-pill-admin">1</span>)</button>
-                  <button type="button" class="role-pill" data-filter="viewer">Kuzatuvchi (<span id="count-pill-viewer">1</span>)</button>
-                  <button type="button" class="role-pill" data-filter="driver">Haydovchilar (<span id="count-pill-driver">0</span>)</button>
+                  <button type="button" class="role-pill active" data-filter="all">Barchasi (<span
+                      id="count-pill-all">0</span>)</button>
+                  <button type="button" class="role-pill" data-filter="admin">Adminlar (<span
+                      id="count-pill-admin">1</span>)</button>
+                  <button type="button" class="role-pill" data-filter="viewer">Kuzatuvchi (<span
+                      id="count-pill-viewer">1</span>)</button>
+                  <button type="button" class="role-pill" data-filter="driver">Haydovchilar (<span
+                      id="count-pill-driver">0</span>)</button>
                 </div>
 
                 <div class="users-search-box">
                   <i data-lucide="search"></i>
-                  <input type="text" id="search-users-input" class="input-control" placeholder="F.I.O, login yoki telefon bo'yicha qidiruv...">
+                  <input type="text" id="search-users-input" class="input-control"
+                    placeholder="F.I.O, login yoki telefon bo'yicha qidiruv...">
                 </div>
               </div>
 
@@ -1472,7 +1547,7 @@
                 <table class="data-table users-table">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th style="width: 48px; text-align: center;">#</th>
                       <th>Foydalanuvchi / F.I.O</th>
                       <th>Roli</th>
                       <th>Logini</th>
@@ -1481,7 +1556,7 @@
                       <th>Oylik maoshi</th>
                       <th>Kunlik stavka</th>
                       <th>Holati</th>
-                      <th style="text-align: right;">Amallar</th>
+                      <th style="text-align: right; min-width: 100px;">Amallar</th>
                     </tr>
                   </thead>
                   <tbody id="superadmin-users-tbody">
@@ -1502,7 +1577,8 @@
     <!-- App Footer -->
     <footer class="app-footer">
       <div class="footer-inner">
-        <p class="footer-copyright">&copy; <span id="current-year">2026</span> Bourkhan Trans &bull; Barcha huquqlar himoyalangan</p>
+        <p class="footer-copyright">&copy; <span id="current-year">2026</span> Bourkhan Trans &bull; Barcha huquqlar
+          himoyalangan</p>
       </div>
     </footer>
   </div> <!-- /#app -->
@@ -1643,7 +1719,8 @@
             <label for="ranking-truck-select" class="ranking-filter-title">
               <i data-lucide="truck"></i> Solishtirish uchun furani tanlang:
             </label>
-            <span class="ranking-auto-hint" id="ranking-auto-hint"><i data-lucide="check-circle-2"></i> Faol mashinangiz</span>
+            <span class="ranking-auto-hint" id="ranking-auto-hint"><i data-lucide="check-circle-2"></i> Faol
+              mashinangiz</span>
           </div>
           <div class="ranking-filter-controls">
             <select id="ranking-truck-select" class="input-control ranking-truck-dropdown">
@@ -1698,7 +1775,8 @@
       <div class="modal-footer ranking-modal-footer">
         <div class="ranking-footer-note">
           <i data-lucide="info"></i>
-          <span>Reyting har oyning 1-sanasida avtomatik yangilanadi. Reyslar soni teng bo'lsa, bosib o'tilgan masofa (km) hisobga olinadi.</span>
+          <span>Reyting har oyning 1-sanasida avtomatik yangilanadi. Reyslar soni teng bo'lsa, bosib o'tilgan masofa
+            (km) hisobga olinadi.</span>
         </div>
         <button type="button" class="btn btn-secondary" id="btn-close-ranking-modal-footer">
           <i data-lucide="x"></i> Yopish
@@ -1739,12 +1817,14 @@
         <div class="support-notice-card">
           <p>
             <i data-lucide="info" class="text-primary"></i>
-            Tizimdan foydalanishda savollaringiz bormi, login/parolni tiklash kerakmi yoki yangi funksiya va hamkorlik taklifi bormi? Istalgan vaqtda to'g'ridan-to'g'ri murojaat qilishingiz mumkin.
+            Tizimdan foydalanishda savollaringiz bormi, login/parolni tiklash kerakmi yoki yangi funksiya va hamkorlik
+            taklifi bormi? Istalgan vaqtda to'g'ridan-to'g'ri murojaat qilishingiz mumkin.
           </p>
         </div>
 
         <div class="support-channels-list">
-          <a href="https://t.me/khvOO7" target="_blank" rel="noopener noreferrer" class="support-channel-card telegram" id="link-support-tg">
+          <a href="https://t.me/khvOO7" target="_blank" rel="noopener noreferrer" class="support-channel-card telegram"
+            id="link-support-tg">
             <div class="channel-icon">
               <i data-lucide="send"></i>
             </div>
@@ -1775,7 +1855,7 @@
 
   <!-- ================= SUPERADMIN: FOYDALANUVCHINI TAHRIRLASH MODALI ================= -->
   <div id="modal-edit-user" class="modal-overlay" style="display: none;" aria-hidden="true">
-    <div class="modal-card">
+    <div class="modal-card modal-card-user">
       <div class="modal-header">
         <div class="modal-title-group">
           <div class="modal-icon"><i data-lucide="user-cog" class="text-primary"></i></div>
@@ -1784,7 +1864,7 @@
             <span class="modal-subtitle" id="edit-user-modal-sub">Hisob ma'lumotlari va huquqlarini o'zgartirish</span>
           </div>
         </div>
-        <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal" title="Yopish">
+        <button type="button" class="btn-close-modal" id="btn-close-edit-user-modal" onclick="window.closeEditUserModal()" title="Yopish">
           <i data-lucide="x"></i>
         </button>
       </div>
@@ -1805,24 +1885,33 @@
             </div>
             <div class="form-group">
               <label for="edit-user-password"><i data-lucide="key"></i> Paroli *</label>
-              <input type="text" id="edit-user-password" class="input-control" required placeholder="Parol">
+              <div class="input-wrapper" style="position: relative;">
+                <input type="password" id="edit-user-password" class="input-control" required placeholder="Parol">
+                <button type="button" class="toggle-password" id="toggle-edit-user-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1" title="Parolni ko'rsatish/yashirish">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="form-group mb-3">
+          <div class="form-group mb-3" id="edit-user-phone-group">
             <label for="edit-user-phone"><i data-lucide="phone"></i> Telefon raqami</label>
-            <input type="text" id="edit-user-phone" class="input-control" placeholder="+998 90 123 45 67">
+            <input type="tel" id="edit-user-phone" class="input-control phone-input-mask" value="+998 " maxlength="17"
+              placeholder="+998 90 123 45 67" autocomplete="tel">
           </div>
 
           <div class="form-group mb-3" id="edit-user-salary-group">
-            <label for="edit-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi (so'm)</label>
+            <label for="edit-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi
+              (so'm)</label>
             <input type="number" id="edit-user-salary" class="input-control" placeholder="2000000" min="0" step="50000">
-            <small class="form-hint" id="edit-user-daily-hint" style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:4px;">Kunlik stavka avtomatik 25 ish kuni asosida hisoblanadi.</small>
+            <small class="form-hint" id="edit-user-daily-hint"
+              style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top:4px;">Kunlik stavka avtomatik
+              25 ish kuni asosida hisoblanadi.</small>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-edit-user">Bekor qilish</button>
-          <button type="submit" class="btn btn-primary"><i data-lucide="save"></i> O'zgarishlarni saqlash</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-edit-user" onclick="window.closeEditUserModal()">Bekor qilish</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-edit-user"><i data-lucide="save"></i> O'zgarishlarni saqlash</button>
         </div>
       </form>
     </div>
@@ -1830,7 +1919,7 @@
 
   <!-- ================= SUPERADMIN: YANGI FOYDALANUVCHI QO'SHISH MODALI ================= -->
   <div id="modal-add-user" class="modal-overlay" style="display: none;" aria-hidden="true">
-    <div class="modal-card">
+    <div class="modal-card modal-card-user">
       <div class="modal-header">
         <div class="modal-title-group">
           <div class="modal-icon"><i data-lucide="user-plus" class="text-success"></i></div>
@@ -1839,7 +1928,7 @@
             <span class="modal-subtitle">Tizimga yangi xodim, admin yoki kuzatuvchi biriktirish</span>
           </div>
         </div>
-        <button type="button" class="btn-close-modal" id="btn-close-add-user-modal" title="Yopish">
+        <button type="button" class="btn-close-modal" id="btn-close-add-user-modal" onclick="window.closeAddUserModal()" title="Yopish">
           <i data-lucide="x"></i>
         </button>
       </div>
@@ -1856,7 +1945,8 @@
 
           <div class="form-group mb-3">
             <label for="add-user-fullname"><i data-lucide="user"></i> To'liq F.I.O / Nomi *</label>
-            <input type="text" id="add-user-fullname" class="input-control" required placeholder="Masalan: Jamshid Karimov">
+            <input type="text" id="add-user-fullname" class="input-control" required
+              placeholder="Masalan: Jamshid Karimov">
           </div>
 
           <div class="form-row-2 mb-3">
@@ -1866,23 +1956,32 @@
             </div>
             <div class="form-group">
               <label for="add-user-password"><i data-lucide="key"></i> Paroli *</label>
-              <input type="text" id="add-user-password" class="input-control" required placeholder="Parol kiriting" minlength="4">
+              <div class="input-wrapper" style="position: relative;">
+                <input type="password" id="add-user-password" class="input-control" required placeholder="Parol kiriting"
+                  minlength="4">
+                <button type="button" class="toggle-password" id="toggle-add-user-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" tabindex="-1" title="Parolni ko'rsatish/yashirish">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="form-group mb-3">
-            <label for="add-user-phone"><i data-lucide="phone"></i> Telefon raqami *</label>
-            <input type="text" id="add-user-phone" class="input-control" required placeholder="+998 90 123 45 67">
+          <div class="form-group mb-3" id="add-user-phone-group">
+            <label for="add-user-phone" id="add-user-phone-label"><i data-lucide="phone"></i> Telefon raqami *</label>
+            <input type="tel" id="add-user-phone" class="input-control phone-input-mask" value="+998 " maxlength="17"
+              placeholder="+998 90 123 45 67" autocomplete="tel">
           </div>
 
           <div class="form-group mb-3" id="add-user-salary-group">
-            <label for="add-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi (so'm) *</label>
-            <input type="number" id="add-user-salary" class="input-control" placeholder="2000000" min="0" step="50000" value="2000000">
+            <label for="add-user-salary"><i data-lucide="banknote" class="text-success"></i> Belgilangan oylik maoshi
+              (so'm) *</label>
+            <input type="number" id="add-user-salary" class="input-control" placeholder="2000000" min="0" step="50000"
+              value="2000000">
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-add-user">Bekor qilish</button>
-          <button type="submit" class="btn btn-success"><i data-lucide="plus"></i> Foydalanuvchini yaratish</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-add-user" onclick="window.closeAddUserModal()">Bekor qilish</button>
+          <button type="submit" class="btn btn-success" id="btn-submit-add-user"><i data-lucide="user-plus"></i> Foydalanuvchini qo'shish</button>
         </div>
       </form>
     </div>
@@ -1901,20 +2000,23 @@
             <span class="modal-subtitle">Qaytarib bo'lmaydigan amal</span>
           </div>
         </div>
-        <button type="button" class="btn-close-modal" id="btn-close-delete-user-modal" title="Yopish">
+        <button type="button" class="btn-close-modal" id="btn-close-delete-user-modal" onclick="window.closeDeleteUserModal()" title="Yopish">
           <i data-lucide="x"></i>
         </button>
       </div>
       <div class="modal-body" style="padding-top: 1.25rem;">
         <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.75rem;">
-          Haqiqatan ham <strong id="delete-user-name-display" style="color: var(--primary);">--</strong> nomli <span id="delete-user-role-display" class="badge">--</span> foydalanuvchisini tizimdan butunlay o'chirmoqchimisiz?
+          Haqiqatan ham <strong id="delete-user-name-display" style="color: var(--primary);">--</strong> nomli <span
+            id="delete-user-role-display" class="badge">--</span> foydalanuvchisini tizimdan butunlay o'chirmoqchimisiz?
         </p>
-        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: #ef4444; font-size: 0.85rem;">
-          <i data-lucide="triangle-alert"></i> Ushbu foydalanuvchi tizimga boshqa kira olmaydi va barcha huquqlari darhol bekor qilinadi.
+        <div
+          style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: #ef4444; font-size: 0.85rem;">
+          <i data-lucide="triangle-alert"></i> Ushbu foydalanuvchi tizimga boshqa kira olmaydi va barcha huquqlari
+          darhol bekor qilinadi.
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="btn-cancel-delete-user">Bekor qilish</button>
+        <button type="button" class="btn btn-secondary" id="btn-cancel-delete-user" onclick="window.closeDeleteUserModal()">Bekor qilish</button>
         <button type="button" class="btn btn-danger" id="btn-confirm-delete-user">
           <i data-lucide="trash-2"></i> Ha, butunlay o'chirilsin
         </button>
@@ -1928,6 +2030,7 @@
   <!-- Firebase Config -->
   <script src="firebase-config.js?v=2.8"></script>
   <!-- Custom JS -->
-  <script src="app.js?v=4.8"></script>
+  <script src="app.js?v=5.1"></script>
 </body>
+
 </html>

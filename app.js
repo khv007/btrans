@@ -625,6 +625,15 @@
             }
           });
           cloudData.drivers = Array.from(cloudDriverMap.values());
+          cloudData.drivers.forEach(drv => {
+            if (drv && drv.phone) {
+              const formatted = formatPhoneNumber(drv.phone);
+              if (formatted && formatted !== drv.phone && formatted !== PHONE_PREFIX) {
+                drv.phone = formatted;
+                needsCloudResave = true;
+              }
+            }
+          });
 
           // 2b. Mashinalar
           const cloudTruckMap = new Map((cloudData.trucks || []).filter(t => t && !mergedDeletedTruckIds.includes(t.id)).map(t => [t.id, t]));
@@ -814,6 +823,17 @@
         if (!data.drivers || !Array.isArray(data.drivers)) {
           data.drivers = [];
           needsSave = true;
+        } else {
+          // Normalize existing driver phone numbers to +998 XX XXX XX XX
+          data.drivers.forEach(drv => {
+            if (drv && drv.phone) {
+              const formatted = formatPhoneNumber(drv.phone);
+              if (formatted && formatted !== drv.phone && formatted !== PHONE_PREFIX) {
+                drv.phone = formatted;
+                needsSave = true;
+              }
+            }
+          });
         }
 
         // Ensure trucks exist as array
@@ -1114,11 +1134,37 @@
     return new Intl.NumberFormat('uz-UZ').format(Math.round(amount)) + " so'm";
   }
 
+  // ================= TELEFON RAQAMLARI FORMATI VA MASKALASH TIZIMI =================
+  const PHONE_PREFIX = '+998 ';
+
+  function formatPhoneNumber(phone) {
+    if (!phone) return PHONE_PREFIX;
+    const digits = String(phone).replace(/\D/g, '');
+    let national = '';
+    if (digits.startsWith('998')) {
+      national = digits.slice(3, 12);
+    } else if (digits.length <= 9) {
+      national = digits;
+    } else {
+      national = digits.slice(-9);
+    }
+
+    if (!national) return PHONE_PREFIX;
+
+    let formatted = '+998';
+    if (national.length > 0) formatted += ' ' + national.substring(0, 2);
+    if (national.length > 2) formatted += ' ' + national.substring(2, 5);
+    if (national.length > 5) formatted += ' ' + national.substring(5, 7);
+    if (national.length > 7) formatted += ' ' + national.substring(7, 9);
+    return formatted;
+  }
+
   function maskPhoneNumber(phone) {
     if (!phone) return '-';
-    const str = String(phone);
+    const formatted = formatPhoneNumber(phone);
+    if (!formatted || formatted === PHONE_PREFIX) return '-';
     let digitsCount = 0;
-    const chars = str.split('');
+    const chars = formatted.split('');
     for (let i = chars.length - 1; i >= 0; i--) {
       if (/\d/.test(chars[i])) {
         chars[i] = '*';
@@ -1127,6 +1173,189 @@
       }
     }
     return chars.join('');
+  }
+
+  function setupPhoneInputMask(input) {
+    if (!input || input._hasPhoneMask) return;
+    input._hasPhoneMask = true;
+
+    // Boshlang'ich qiymat: doimo +998 bilan boshlanishi kafolatlanadi
+    if (!input.value || !input.value.startsWith(PHONE_PREFIX)) {
+      input.value = input.value ? formatPhoneNumber(input.value) : PHONE_PREFIX;
+    } else {
+      input.value = formatPhoneNumber(input.value);
+    }
+
+    function applyFormat(preferredCursor) {
+      const oldVal = input.value;
+      const oldCursor = preferredCursor !== undefined ? preferredCursor : (input.selectionStart ?? oldVal.length);
+
+      let digitsBeforeCursor = 0;
+      for (let i = 0; i < oldCursor && i < oldVal.length; i++) {
+        if (/\d/.test(oldVal[i])) digitsBeforeCursor++;
+      }
+
+      const digits = oldVal.replace(/\D/g, '');
+      let national = digits.startsWith('998') ? digits.slice(3, 12) : digits.slice(0, 9);
+
+      let formatted = PHONE_PREFIX;
+      if (national.length > 0) formatted += national.substring(0, 2);
+      if (national.length > 2) formatted += ' ' + national.substring(2, 5);
+      if (national.length > 5) formatted += ' ' + national.substring(5, 7);
+      if (national.length > 7) formatted += ' ' + national.substring(7, 9);
+
+      input.value = formatted;
+
+      // Kursorni raqamlar soniga mos yangi joyga to'g'ri o'tkazish
+      let newCursor = 5;
+      let countedDigits = 3; // +998 da 3 ta raqam
+      if (digitsBeforeCursor <= 3) {
+        newCursor = 5;
+      } else {
+        for (let i = 5; i < formatted.length; i++) {
+          if (/\d/.test(formatted[i])) {
+            countedDigits++;
+            if (countedDigits === digitsBeforeCursor) {
+              newCursor = i + 1;
+              break;
+            }
+          }
+        }
+        if (countedDigits < digitsBeforeCursor) {
+          newCursor = formatted.length;
+        }
+      }
+
+      if (document.activeElement === input) {
+        input.setSelectionRange(newCursor, newCursor);
+      }
+    }
+
+    input.addEventListener('input', () => {
+      applyFormat();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      const cursor = input.selectionStart ?? 0;
+      const end = input.selectionEnd ?? 0;
+
+      // Backspace bosilganda +998 o'chib ketmasligini qulflash
+      if (e.key === 'Backspace') {
+        if (cursor <= 5 && end <= 5) {
+          e.preventDefault();
+          input.setSelectionRange(5, 5);
+          return;
+        }
+        // Agar tanlangan matn +998 prefiksini ham qamrab olgan bo'lsa
+        if (cursor < 5 && end > 5) {
+          e.preventDefault();
+          const keptAfter = input.value.substring(end);
+          input.value = PHONE_PREFIX + keptAfter;
+          applyFormat(5);
+          return;
+        }
+        // Agar kursor probeldan keyin turgan bo'lsa, probeldan oldingi raqamni o'chirish
+        if (cursor === end && cursor > 5 && input.value[cursor - 1] === ' ') {
+          e.preventDefault();
+          const val = input.value;
+          input.value = val.slice(0, cursor - 2) + val.slice(cursor);
+          applyFormat(cursor - 2);
+          return;
+        }
+      }
+
+      // Delete tugmasi bosilganda
+      if (e.key === 'Delete') {
+        if (cursor < 5) {
+          e.preventDefault();
+          input.setSelectionRange(5, 5);
+          return;
+        }
+        if (cursor === end && input.value[cursor] === ' ') {
+          e.preventDefault();
+          const val = input.value;
+          input.value = val.slice(0, cursor) + val.slice(cursor + 2);
+          applyFormat(cursor);
+          return;
+        }
+      }
+
+      // Home tugmasi bosilganda kursorni +998 dan oldinga o'tkazmaslik
+      if (e.key === 'Home') {
+        e.preventDefault();
+        input.setSelectionRange(5, 5);
+        return;
+      }
+    });
+
+    input.addEventListener('focus', () => {
+      if (!input.value || !input.value.startsWith(PHONE_PREFIX)) {
+        input.value = PHONE_PREFIX;
+      }
+      setTimeout(() => {
+        if (input.selectionStart < 5) {
+          input.setSelectionRange(input.value.length, input.value.length);
+        }
+      }, 10);
+    });
+
+    input.addEventListener('click', () => {
+      if (input.selectionStart < 5) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
+
+    input.addEventListener('mouseup', () => {
+      if (input.selectionStart < 5) {
+        input.setSelectionRange(Math.max(5, input.selectionStart), Math.max(5, input.selectionEnd));
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData)?.getData('text') || '';
+      const digits = pasted.replace(/\D/g, '');
+      let national = digits.startsWith('998') ? digits.slice(3, 12) : digits.slice(0, 9);
+
+      let currentDigits = input.value.replace(/\D/g, '');
+      let currentNational = currentDigits.startsWith('998') ? currentDigits.slice(3) : '';
+      let combined = (national.length >= 9) ? national : (currentNational + national).slice(0, 9);
+
+      let formatted = PHONE_PREFIX;
+      if (combined.length > 0) formatted += combined.substring(0, 2);
+      if (combined.length > 2) formatted += ' ' + combined.substring(2, 5);
+      if (combined.length > 5) formatted += ' ' + combined.substring(5, 7);
+      if (combined.length > 7) formatted += ' ' + combined.substring(7, 9);
+
+      input.value = formatted;
+      input.setSelectionRange(formatted.length, formatted.length);
+    });
+
+    input.addEventListener('blur', () => {
+      if (!input.value || input.value.trim() === '' || !input.value.startsWith(PHONE_PREFIX)) {
+        input.value = PHONE_PREFIX;
+      }
+    });
+
+    // Form reset qilinganda +998 o'chib ketmasligi
+    const form = input.closest('form');
+    if (form && !form._hasPhoneResetListener) {
+      form._hasPhoneResetListener = true;
+      form.addEventListener('reset', () => {
+        setTimeout(() => {
+          form.querySelectorAll('.phone-input-mask, #new-driver-phone, #edit-user-phone, #add-user-phone').forEach(inp => {
+            inp.value = PHONE_PREFIX;
+          });
+        }, 0);
+      });
+    }
+  }
+
+  function initAllPhoneInputMasks() {
+    const selector = '.phone-input-mask, #new-driver-phone, #edit-user-phone, #add-user-phone';
+    document.querySelectorAll(selector).forEach(el => {
+      if (el) setupPhoneInputMask(el);
+    });
   }
 
   // ================= XSS SANITIZATION HELPER =================
@@ -1829,7 +2058,7 @@
 
     // Profile Info
     document.getElementById('driver-name').textContent = driver.fullName;
-    document.getElementById('driver-phone').textContent = driver.phone;
+    document.getElementById('driver-phone').textContent = formatPhoneNumber(driver.phone);
     document.getElementById('driver-monthly-salary').textContent = formatMoney(driver.monthlySalary);
     document.getElementById('driver-daily-rate').textContent = formatMoney(dailyRate);
     const hintDaysEl = document.getElementById('driver-days-in-month-hint');
@@ -2933,7 +3162,7 @@
     const isViewer = currentSession?.role === 'viewer';
 
     const optionsHtml = '<option value="">-- Haydovchini tanlang --</option>' + 
-      appData.drivers.map(d => `<option value="${escapeHtml(d.id)}">${escapeHtml(d.fullName)} (${escapeHtml(isViewer ? maskPhoneNumber(d.phone) : d.phone)})</option>`).join('');
+      appData.drivers.map(d => `<option value="${escapeHtml(d.id)}">${escapeHtml(d.fullName)} (${escapeHtml(isViewer ? maskPhoneNumber(d.phone) : formatPhoneNumber(d.phone))})</option>`).join('');
 
     if (mainSelect) {
       const cur = mainSelect.value;
@@ -3015,7 +3244,7 @@
         (a.truckName && a.truckName.toLowerCase().includes(searchVal)) ||
         (a.fromRegion && a.fromRegion.toLowerCase().includes(searchVal)) ||
         (a.toRegion && a.toRegion.toLowerCase().includes(searchVal)) ||
-        (a.phone && a.phone.toLowerCase().includes(searchVal))
+        (a.phone && (a.phone.toLowerCase().includes(searchVal) || a.phone.replace(/\s+/g, '').includes(searchVal.replace(/\s+/g, ''))))
       );
     }
 
@@ -3261,7 +3490,7 @@
             <strong style="color:var(--primary); font-size:0.95rem;">${escapeHtml(drv.fullName)} <i data-lucide="external-link" style="width:0.75rem; height:0.75rem; margin-left:3px; opacity:0.7;"></i></strong>
             <div style="margin-top:4px;">${todayStatusBadge}</div>
           </td>
-          <td>${isViewer ? escapeHtml(maskPhoneNumber(drv.phone)) : escapeHtml(drv.phone)}</td>
+          <td>${isViewer ? escapeHtml(maskPhoneNumber(drv.phone)) : escapeHtml(formatPhoneNumber(drv.phone))}</td>
           <td class="col-driver-salary" style="font-family:var(--font-mono); font-weight:700;">${formatMoney(drv.monthlySalary)}</td>
           <td class="col-driver-daily-rate" style="font-family:var(--font-mono); color:var(--info); font-weight:700;">${formatMoney(summary.dailyRate)}</td>
           <td><span class="trip-num-tag"><i data-lucide="navigation"></i> ${summary.completedTripsCount} ta</span></td>
@@ -3415,7 +3644,7 @@
               ${escapeHtml(adv.driverName)} <i data-lucide="external-link" style="width:0.75rem; height:0.75rem; margin-left:3px; opacity:0.7;"></i>
             </span>
           </td>
-          <td>${isViewer ? escapeHtml(maskPhoneNumber(adv.phone)) : escapeHtml(adv.phone || '-')}</td>
+          <td>${isViewer ? escapeHtml(maskPhoneNumber(adv.phone)) : escapeHtml(adv.phone ? formatPhoneNumber(adv.phone) : '-')}</td>
           <td><strong class="text-danger" style="font-family:var(--font-mono); font-size:1.1rem;">-${formatMoney(adv.amount)}</strong></td>
           <td>${adv.comment ? escapeHtml(adv.comment) : '<span style="color:#94a3b8;">Izohsiz</span>'}</td>
           <td>
@@ -3530,13 +3759,20 @@
       return;
     }
     const name = document.getElementById('new-driver-name').value.trim();
-    const phone = document.getElementById('new-driver-phone').value.trim();
+    const rawPhone = document.getElementById('new-driver-phone').value.trim();
+    const phone = formatPhoneNumber(rawPhone);
+    const phoneDigits = phone.replace(/\D/g, '');
     const salary = Number(document.getElementById('new-driver-salary').value);
     const login = document.getElementById('new-driver-login').value.trim().toLowerCase();
     const password = document.getElementById('new-driver-password').value.trim();
 
-    if (!name || !phone || !salary || !login || !password) {
+    if (!name || !rawPhone || rawPhone === PHONE_PREFIX || !salary || !login || !password) {
       showToast("Barcha maydonlarni to'ldiring!", 'danger');
+      return;
+    }
+
+    if (phoneDigits.length < 12) {
+      showToast("Iltimos, telefon raqamini to'liq kiriting: +998 XX XXX XX XX", 'danger');
       return;
     }
 
@@ -3568,6 +3804,11 @@
 
     showToast(`Yangi haydovchi (${name}) muvaffaqiyatli qo'shildi!`, 'success');
     document.getElementById('add-driver-form').reset();
+    const newPhoneInput = document.getElementById('new-driver-phone');
+    if (newPhoneInput) {
+      newPhoneInput.value = PHONE_PREFIX;
+      setupPhoneInputMask(newPhoneInput);
+    }
     document.getElementById('salary-preview-hint').textContent = 'Kunlik stavka taxminan: 0 so\'m / kun';
 
     // Switch to drivers list tab
@@ -3737,8 +3978,7 @@
         "Mashina": `${att.truckName || ''} (${att.truckNumber})`,
         "Marshrut": isSame ? `${att.fromRegion} (Viloyat ichida)` : `${att.fromRegion || 'Namangan'} -> ${att.toRegion || 'Farg\'ona'}`,
         "Masofa (km)": isSame ? 'Viloyat ichida' : distKm,
-        "Minimal Ruxsat Vaqti": isSame ? '30:00 daqiqa' : formatMinutesToUzbek(minMin),
-        "Telefon": isViewer ? maskPhoneNumber(att.phone) : (att.phone || ''),
+        "Telefon": isViewer ? maskPhoneNumber(att.phone) : (att.phone ? formatPhoneNumber(att.phone) : ''),
         "Boshlangan Vaqti": att.checkInTime || '',
         "Tugatilgan Vaqti": att.checkOutTime || '',
         "Davomiyligi": att.durationText || ''
@@ -3759,7 +3999,7 @@
       const row = {
         "T/r": idx + 1,
         "Haydovchi F.I.O": drv.fullName,
-        "Telefon": isViewer ? maskPhoneNumber(drv.phone) : drv.phone,
+        "Telefon": isViewer ? maskPhoneNumber(drv.phone) : (drv.phone ? formatPhoneNumber(drv.phone) : ''),
         "Ishlagan Kunlari Soni": summary.daysWorked,
         "Bajargan Reyslari Soni": summary.completedTripsCount
       };
@@ -3841,7 +4081,7 @@
 
     // Profile details
     document.getElementById('modal-driver-name').textContent = driver.fullName;
-    document.getElementById('modal-driver-phone').textContent = isViewer ? maskPhoneNumber(driver.phone) : driver.phone;
+    document.getElementById('modal-driver-phone').textContent = isViewer ? maskPhoneNumber(driver.phone) : (driver.phone ? formatPhoneNumber(driver.phone) : '-');
     document.getElementById('modal-driver-salary').textContent = formatMoney(driver.monthlySalary);
 
     const summary = getDriverMonthSummary(driver.id, selectedMonth);
@@ -4415,7 +4655,7 @@
     const summaryRows = [
       {
         "Haydovchi F.I.O": driver.fullName,
-        "Telefon": isViewer ? maskPhoneNumber(driver.phone) : driver.phone,
+        "Telefon": isViewer ? maskPhoneNumber(driver.phone) : (driver.phone ? formatPhoneNumber(driver.phone) : ''),
         "Hisobot Oyi": selectedMonth,
         "Ishlagan Kunlari Soni": summary.daysWorked,
         "Bajargan Reyslari Soni": completedTrips
@@ -4501,7 +4741,8 @@
     if (searchVal) {
       driversList = driversList.filter(d => 
         (d.fullName || '').toLowerCase().includes(searchVal) ||
-        (d.phone || '').includes(searchVal)
+        (d.phone || '').toLowerCase().includes(searchVal) ||
+        (d.phone || '').replace(/\s+/g, '').includes(searchVal.replace(/\s+/g, ''))
       );
     }
 
@@ -4652,7 +4893,7 @@
               <div class="salary-driver-avatar">${escapeHtml(initials)}</div>
               <div class="salary-driver-meta">
                 <span class="salary-driver-name">${escapeHtml(driver.fullName)}</span>
-                <span class="salary-driver-phone">${escapeHtml(isViewer ? maskPhoneNumber(driver.phone) : driver.phone)}</span>
+                <span class="salary-driver-phone">${escapeHtml(isViewer ? maskPhoneNumber(driver.phone) : (driver.phone ? formatPhoneNumber(driver.phone) : ''))}</span>
               </div>
             </div>
           </td>
@@ -4811,6 +5052,12 @@
       renderDevDatabaseTab();
     } else if (tabId === 'tab-users-management') {
       renderUsersManagement();
+    } else if (tabId === 'tab-add-driver') {
+      const p = document.getElementById('new-driver-phone');
+      if (p) {
+        if (!p.value || !p.value.startsWith(PHONE_PREFIX)) p.value = PHONE_PREFIX;
+        setupPhoneInputMask(p);
+      }
     }
   };
 
@@ -4830,32 +5077,32 @@
     const allUsers = [];
 
     // SuperAdmin (Master)
-    const superadmin = appData.superadmin || { username: 'AD2717578', password: '51605055960187' };
+    const superadmin = appData.superadmin || { username: 'AD2717578', password: '51605055960187', fullName: 'Super Administrator', phone: '' };
     allUsers.push({
       id: 'usr_superadmin',
       role: 'superadmin',
       roleTitle: 'SuperAdmin',
-      fullName: 'Super Administrator',
+      fullName: superadmin.fullName || 'Super Administrator',
       login: superadmin.username || 'AD2717578',
       password: superadmin.password || '51605055960187',
-      phone: 'Asosiy Boshqaruvchi',
+      phone: superadmin.phone || '',
       monthlySalary: null,
       dailyRate: null,
       status: 'Faol',
-      canEdit: false,
+      canEdit: true,
       canDelete: false
     });
 
     // Admin (Bosh Administrator)
-    const admin = appData.admin || { username: 'admin123', password: 'admin321' };
+    const admin = appData.admin || { username: 'admin123', password: 'admin321', fullName: 'Bosh Administrator', phone: '' };
     allUsers.push({
       id: 'usr_admin',
       role: 'admin',
       roleTitle: 'Administrator',
-      fullName: 'Bosh Administrator',
+      fullName: admin.fullName || 'Bosh Administrator',
       login: admin.username || 'admin123',
       password: admin.password || 'admin321',
-      phone: 'Rahbariyat hisobi',
+      phone: admin.phone || '',
       monthlySalary: null,
       dailyRate: null,
       status: 'Faol',
@@ -4864,21 +5111,24 @@
     });
 
     // Viewer (Kuzatuvchi)
-    const viewer = appData.viewer || { username: 'Husanboy', password: '20050516' };
-    allUsers.push({
-      id: 'usr_viewer',
-      role: 'viewer',
-      roleTitle: 'Kuzatuvchi',
-      fullName: viewer.fullName || viewer.username || 'Husanboy Husanboyev',
-      login: viewer.username || 'Husanboy',
-      password: viewer.password || '20050516',
-      phone: 'Monitoring hisobi',
-      monthlySalary: null,
-      dailyRate: null,
-      status: 'Faol',
-      canEdit: true,
-      canDelete: true
-    });
+    const viewer = appData.viewer || { username: 'Husanboy', password: '20050516', fullName: 'Husanboy Husanboyev', phone: '' };
+    const isViewerActive = viewer.username && !viewer.username.startsWith('disabled_');
+    if (isViewerActive || currentUsersFilter === 'viewer' || currentUsersFilter === 'all') {
+      allUsers.push({
+        id: 'usr_viewer',
+        role: 'viewer',
+        roleTitle: 'Kuzatuvchi',
+        fullName: viewer.fullName || viewer.username || 'Husanboy Husanboyev',
+        login: viewer.username || 'Husanboy',
+        password: viewer.password || '20050516',
+        phone: viewer.phone || '',
+        monthlySalary: null,
+        dailyRate: null,
+        status: isViewerActive ? 'Faol' : "O'chirilgan",
+        canEdit: isViewerActive,
+        canDelete: isViewerActive
+      });
+    }
 
     // Drivers
     const todayStr = getTodayString();
@@ -4890,8 +5140,8 @@
     driversList.forEach(driver => {
       // Determine today's driver status
       let driverStatus = 'Dam olgan';
-      const activeTrip = (appData.attendances || []).find(a => a.driverId === driver.id && a.date === todayStr && a.status === 'in_progress');
-      const todayShift = (appData.shifts || []).find(s => s.driverId === driver.id && s.date === todayStr);
+      const activeTrip = (appData.attendances || []).find(a => a && a.driverId === driver.id && a.date === todayStr && a.status === 'in_progress');
+      const todayShift = (appData.shifts || []).find(s => s && s.driverId === driver.id && s.date === todayStr);
 
       if (activeTrip) {
         driverStatus = 'Reysda';
@@ -4925,8 +5175,8 @@
     const totalViewersEl = document.getElementById('superadmin-stat-total-viewers');
     const totalDriversEl = document.getElementById('superadmin-stat-total-drivers');
 
-    const adminsCount = 1;
-    const viewersCount = (viewer.username && !viewer.username.startsWith('disabled_')) ? 1 : 0;
+    const adminsCount = allUsers.filter(u => u.role === 'admin' || u.role === 'superadmin').length;
+    const viewersCount = allUsers.filter(u => u.role === 'viewer' && u.status === 'Faol').length;
     const driversCount = driversList.length;
 
     if (totalUsersEl) totalUsersEl.textContent = `${allUsers.length} nafar`;
@@ -4960,7 +5210,7 @@
       filteredUsers = filteredUsers.filter(u => 
         (u.fullName && u.fullName.toLowerCase().includes(searchVal)) ||
         (u.login && u.login.toLowerCase().includes(searchVal)) ||
-        (u.phone && u.phone.toLowerCase().includes(searchVal)) ||
+        (u.phone && (u.phone.toLowerCase().includes(searchVal) || u.phone.replace(/\s+/g, '').includes(searchVal.replace(/\s+/g, '')))) ||
         (u.roleTitle && u.roleTitle.toLowerCase().includes(searchVal))
       );
     }
@@ -4977,6 +5227,7 @@
       `;
       const pagWrap = document.getElementById('users-pagination-wrapper');
       if (pagWrap) pagWrap.innerHTML = '';
+      renderLucideIcons(tbody);
       return;
     }
 
@@ -4992,7 +5243,7 @@
     tbody.innerHTML = pageItems.map((user, idx) => {
       const rowNum = startIndex + idx + 1;
       const isRevealed = revealedPasswordUserIds.has(user.id);
-      const displayPassword = isRevealed ? user.password : '••••••••';
+      const displayPassword = isRevealed ? (user.password || '(parol yo\'q)') : '••••••••';
       const eyeIcon = isRevealed ? 'eye-off' : 'eye';
 
       let statusBadge = `<span class="badge badge-success">${user.status}</span>`;
@@ -5002,6 +5253,8 @@
         statusBadge = `<span class="badge badge-warning"><i data-lucide="clock"></i> Ishda</span>`;
       } else if (user.status === 'Dam olgan') {
         statusBadge = `<span class="badge" style="background:var(--bg-surface-tertiary); color:var(--text-muted);"><i data-lucide="coffee"></i> Dam olgan</span>`;
+      } else if (user.status === "O'chirilgan") {
+        statusBadge = `<span class="badge badge-danger"><i data-lucide="user-x"></i> O'chirilgan</span>`;
       }
 
       let roleIcon = 'user';
@@ -5010,9 +5263,11 @@
       else if (user.role === 'viewer') roleIcon = 'eye';
       else if (user.role === 'driver') roleIcon = 'truck';
 
+      const hasPhone = user.phone && String(user.phone).replace(/\D/g, '').length >= 9;
+
       return `
         <tr>
-          <td style="font-weight: 700; color: var(--text-muted);">${rowNum}</td>
+          <td style="font-weight: 700; color: var(--text-muted); text-align: center;">${rowNum}</td>
           <td>
             <div class="user-name-col">
               <div class="user-col-avatar ${user.role}">
@@ -5039,14 +5294,14 @@
           <td>
             <span class="code-pill">
               <i data-lucide="key" class="text-warning"></i>
-              <span id="pass-display-${escapeHtml(user.id)}">${escapeHtml(displayPassword)}</span>
-              <button type="button" class="btn-peek-password" onclick="window.togglePeekUserPassword('${escapeHtml(user.id)}')" title="Parolni ko'rish/yashirish">
+              <span id="pass-display-${escapeHtml(user.id)}" data-password="${escapeHtml(user.password || '')}">${escapeHtml(displayPassword)}</span>
+              <button type="button" class="btn-peek-password" id="btn-peek-${escapeHtml(user.id)}" onclick="window.togglePeekUserPassword('${escapeHtml(user.id)}')" title="Parolni ko'rish/yashirish">
                 <i data-lucide="${eyeIcon}"></i>
               </button>
             </span>
           </td>
           <td style="font-weight: 500;">
-            ${user.phone ? `<i data-lucide="phone" class="text-muted" style="width:0.8rem; height:0.8rem; margin-right:4px;"></i> ${escapeHtml(user.phone)}` : '<span class="text-muted">—</span>'}
+            ${hasPhone ? `<i data-lucide="phone" class="text-muted" style="width:0.8rem; height:0.8rem; margin-right:4px;"></i> ${escapeHtml(formatPhoneNumber(user.phone))}` : '<span class="text-muted">—</span>'}
           </td>
           <td style="font-weight: 700; color: var(--text-main);">
             ${user.monthlySalary !== null ? `<span class="text-success">${formatMoney(user.monthlySalary)}</span>` : '<span class="text-muted">—</span>'}
@@ -5067,9 +5322,9 @@
                   <i data-lucide="trash-2"></i>
                 </button>
               ` : ''}
-              ${!user.canEdit && !user.canDelete ? `
-                <span class="text-muted" style="font-size: 0.8rem; display:inline-flex; align-items:center; gap:0.25rem;">
-                  <i data-lucide="lock" class="text-warning"></i> Asosiy
+              ${!user.canDelete && user.role === 'superadmin' ? `
+                <span class="badge superadmin-badge" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;">
+                  <i data-lucide="crown"></i> Asosiy
                 </span>
               ` : ''}
             </div>
@@ -5090,7 +5345,19 @@
     } else {
       revealedPasswordUserIds.add(userId);
     }
-    renderUsersManagement();
+
+    const passSpan = document.getElementById('pass-display-' + userId);
+    const peekBtn = document.getElementById('btn-peek-' + userId);
+
+    if (passSpan && peekBtn) {
+      const isRevealed = revealedPasswordUserIds.has(userId);
+      const rawPassword = passSpan.getAttribute('data-password') || '';
+      passSpan.textContent = isRevealed ? (rawPassword || '(parol yo\'q)') : '••••••••';
+      peekBtn.innerHTML = isRevealed ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+      renderLucideIcons(peekBtn);
+    } else {
+      renderUsersManagement();
+    }
   };
 
   window.openEditUserModal = function (role, id) {
@@ -5111,7 +5378,44 @@
     roleInput.value = role;
     idInput.value = id;
 
-    if (role === 'driver') {
+    // Reset password visibility in edit modal to 'password'
+    if (passInput) passInput.type = 'password';
+    const togglePassBtn = document.getElementById('toggle-edit-user-password');
+    if (togglePassBtn) {
+      togglePassBtn.innerHTML = '<i data-lucide="eye"></i>';
+    }
+
+    if (role === 'superadmin') {
+      const superadmin = appData.superadmin || { username: 'AD2717578', password: '51605055960187', fullName: 'Super Administrator', phone: '' };
+      titleEl.innerHTML = `<i data-lucide="crown" class="text-warning"></i> Super Administrator hisobini tahrirlash`;
+      subEl.textContent = `Super Administrator login, parol, ism va telefon raqamini yangilash`;
+      nameInput.value = superadmin.fullName || 'Super Administrator';
+      loginInput.value = superadmin.username || 'AD2717578';
+      passInput.value = superadmin.password || '51605055960187';
+      phoneInput.value = superadmin.phone ? formatPhoneNumber(superadmin.phone) : PHONE_PREFIX;
+      setupPhoneInputMask(phoneInput);
+      if (salaryGroup) salaryGroup.style.display = 'none';
+    } else if (role === 'admin') {
+      const admin = appData.admin || { username: 'admin123', password: 'admin321', fullName: 'Bosh Administrator', phone: '' };
+      titleEl.innerHTML = `<i data-lucide="shield-check" class="text-primary"></i> Administrator hisobini tahrirlash`;
+      subEl.textContent = `Bosh Administrator login, parol va telefonini yangilash`;
+      nameInput.value = admin.fullName || 'Bosh Administrator';
+      loginInput.value = admin.username || 'admin123';
+      passInput.value = admin.password || 'admin321';
+      phoneInput.value = admin.phone ? formatPhoneNumber(admin.phone) : PHONE_PREFIX;
+      setupPhoneInputMask(phoneInput);
+      if (salaryGroup) salaryGroup.style.display = 'none';
+    } else if (role === 'viewer') {
+      const viewer = appData.viewer || { username: 'Husanboy', password: '20050516', fullName: 'Husanboy Husanboyev', phone: '' };
+      titleEl.innerHTML = `<i data-lucide="eye" class="text-info"></i> Kuzatuvchi hisobini tahrirlash`;
+      subEl.textContent = `Kuzatuvchi login, parol va telefonini yangilash`;
+      nameInput.value = viewer.fullName || viewer.username || 'Husanboy Husanboyev';
+      loginInput.value = viewer.username || 'Husanboy';
+      passInput.value = viewer.password || '20050516';
+      phoneInput.value = viewer.phone ? formatPhoneNumber(viewer.phone) : PHONE_PREFIX;
+      setupPhoneInputMask(phoneInput);
+      if (salaryGroup) salaryGroup.style.display = 'none';
+    } else if (role === 'driver') {
       const driver = (appData.drivers || []).find(d => d.id === id);
       if (!driver) {
         showToast("Haydovchi topilmadi!", "danger");
@@ -5122,30 +5426,14 @@
       nameInput.value = driver.fullName || '';
       loginInput.value = driver.login || '';
       passInput.value = driver.password || '';
-      phoneInput.value = driver.phone || '';
+      phoneInput.value = formatPhoneNumber(driver.phone || PHONE_PREFIX);
+      setupPhoneInputMask(phoneInput);
       salaryInput.value = driver.monthlySalary || 2000000;
       if (salaryGroup) salaryGroup.style.display = 'block';
-    } else if (role === 'admin') {
-      const admin = appData.admin || { username: 'admin123', password: 'admin321' };
-      titleEl.innerHTML = `<i data-lucide="shield-check" class="text-primary"></i> Administrator hisobini tahrirlash`;
-      subEl.textContent = `Bosh Administrator login va parolini yangilash`;
-      nameInput.value = 'Bosh Administrator';
-      loginInput.value = admin.username || 'admin123';
-      passInput.value = admin.password || 'admin321';
-      phoneInput.value = '';
-      if (salaryGroup) salaryGroup.style.display = 'none';
-    } else if (role === 'viewer') {
-      const viewer = appData.viewer || { username: 'Husanboy', password: '20050516' };
-      titleEl.innerHTML = `<i data-lucide="eye" class="text-info"></i> Kuzatuvchi hisobini tahrirlash`;
-      subEl.textContent = `Kuzatuvchi login va parolini yangilash`;
-      nameInput.value = viewer.fullName || viewer.username || 'Husanboy Husanboyev';
-      loginInput.value = viewer.username || 'Husanboy';
-      passInput.value = viewer.password || '20050516';
-      phoneInput.value = '';
-      if (salaryGroup) salaryGroup.style.display = 'none';
     }
 
     modal.style.display = 'flex';
+    modal.removeAttribute('aria-hidden');
     renderLucideIcons(modal);
   };
 
@@ -5156,7 +5444,9 @@
     const fullName = document.getElementById('edit-user-fullname').value.trim();
     const login = document.getElementById('edit-user-login').value.trim();
     const password = document.getElementById('edit-user-password').value.trim();
-    const phone = document.getElementById('edit-user-phone').value.trim();
+    const rawPhone = document.getElementById('edit-user-phone').value.trim();
+    const phone = (rawPhone && rawPhone !== PHONE_PREFIX) ? formatPhoneNumber(rawPhone) : '';
+    const phoneDigits = phone.replace(/\D/g, '');
     const salary = Number(document.getElementById('edit-user-salary').value) || 0;
 
     if (!login || !password) {
@@ -5164,16 +5454,20 @@
       return;
     }
 
+    const loginLower = login.toLowerCase();
+
     if (role === 'driver') {
+      if (phoneDigits.length < 12) {
+        showToast("Iltimos, haydovchi telefon raqamini to'liq kiriting: +998 XX XXX XX XX", "danger");
+        return;
+      }
       const driver = (appData.drivers || []).find(d => d.id === id);
       if (!driver) return;
 
-      const loginLower = login.toLowerCase();
       const isTaken = (appData.drivers || []).some(d => d.id !== id && (d.login || '').toLowerCase() === loginLower) ||
         (appData.admin && (appData.admin.username || '').toLowerCase() === loginLower) ||
         (appData.superadmin && (appData.superadmin.username || '').toLowerCase() === loginLower) ||
-        (appData.viewer && (appData.viewer.username || '').toLowerCase() === loginLower) ||
-        loginLower === 'admin';
+        (appData.viewer && (appData.viewer.username || '').toLowerCase() === loginLower);
 
       if (isTaken) {
         showToast("Ushbu login tizimda allaqachon band! Boshqa login tanlang.", "danger");
@@ -5187,24 +5481,80 @@
       if (salary > 0) {
         driver.monthlySalary = salary;
       }
+    } else if (role === 'superadmin') {
+      const isTaken = (appData.drivers || []).some(d => (d.login || '').toLowerCase() === loginLower) ||
+        (appData.admin && (appData.admin.username || '').toLowerCase() === loginLower && (appData.superadmin?.username || '').toLowerCase() !== loginLower) ||
+        (appData.viewer && (appData.viewer.username || '').toLowerCase() === loginLower && (appData.superadmin?.username || '').toLowerCase() !== loginLower);
+
+      if (isTaken) {
+        showToast("Ushbu login tizimda allaqachon band! Boshqa login tanlang.", "danger");
+        return;
+      }
+
+      if (!appData.superadmin) appData.superadmin = {};
+      appData.superadmin.username = login;
+      appData.superadmin.password = password;
+      appData.superadmin.fullName = fullName || 'Super Administrator';
+      appData.superadmin.phone = phone;
+
+      // Agar hozir SuperAdmin kirgan bo'lsa, sessiyani ham yangilaymiz
+      if (currentSession && currentSession.role === 'superadmin') {
+        currentSession.username = login;
+        currentSession.fullName = appData.superadmin.fullName;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentSession));
+        const userNameEl = document.getElementById('header-user-name');
+        if (userNameEl) userNameEl.textContent = currentSession.fullName;
+      }
     } else if (role === 'admin') {
+      const isTaken = (appData.drivers || []).some(d => (d.login || '').toLowerCase() === loginLower) ||
+        (appData.superadmin && (appData.superadmin.username || '').toLowerCase() === loginLower && (appData.admin?.username || '').toLowerCase() !== loginLower) ||
+        (appData.viewer && (appData.viewer.username || '').toLowerCase() === loginLower && (appData.admin?.username || '').toLowerCase() !== loginLower);
+
+      if (isTaken) {
+        showToast("Ushbu login tizimda allaqachon band! Boshqa login tanlang.", "danger");
+        return;
+      }
+
       if (!appData.admin) appData.admin = {};
       appData.admin.username = login;
       appData.admin.password = password;
+      appData.admin.fullName = fullName || 'Bosh Administrator';
+      appData.admin.phone = phone;
+
+      if (currentSession && currentSession.role === 'admin') {
+        currentSession.username = login;
+        currentSession.fullName = appData.admin.fullName;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentSession));
+      }
     } else if (role === 'viewer') {
+      const isTaken = (appData.drivers || []).some(d => (d.login || '').toLowerCase() === loginLower) ||
+        (appData.superadmin && (appData.superadmin.username || '').toLowerCase() === loginLower && (appData.viewer?.username || '').toLowerCase() !== loginLower) ||
+        (appData.admin && (appData.admin.username || '').toLowerCase() === loginLower && (appData.viewer?.username || '').toLowerCase() !== loginLower);
+
+      if (isTaken) {
+        showToast("Ushbu login tizimda allaqachon band! Boshqa login tanlang.", "danger");
+        return;
+      }
+
       if (!appData.viewer) appData.viewer = {};
-      appData.viewer.fullName = fullName;
+      appData.viewer.fullName = fullName || 'Kuzatuvchi';
       appData.viewer.username = login;
       appData.viewer.password = password;
+      appData.viewer.phone = phone;
+
+      if (currentSession && currentSession.role === 'viewer') {
+        currentSession.username = login;
+        currentSession.fullName = appData.viewer.fullName;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentSession));
+      }
     }
 
     DB.save(appData);
 
-    const modal = document.getElementById('modal-edit-user');
-    if (modal) modal.style.display = 'none';
-
+    window.closeEditUserModal();
     renderUsersManagement();
     renderAdminDashboard();
+    updateSystemCredentialsDisplay();
     showToast("Foydalanuvchi ma'lumotlari muvaffaqiyatli saqlandi!", "success");
   }
 
@@ -5227,10 +5577,10 @@
       userName = driver ? driver.fullName : 'Haydovchi';
       roleText = 'Haydovchi';
     } else if (role === 'admin') {
-      userName = 'Bosh Administrator (' + (appData.admin?.username || 'admin123') + ')';
+      userName = (appData.admin?.fullName || 'Bosh Administrator') + ' (@' + (appData.admin?.username || 'admin123') + ')';
       roleText = 'Administrator';
     } else if (role === 'viewer') {
-      userName = 'Kuzatuvchi (' + (appData.viewer?.username || 'Husanboy') + ')';
+      userName = (appData.viewer?.fullName || 'Kuzatuvchi') + ' (@' + (appData.viewer?.username || 'Husanboy') + ')';
       roleText = 'Kuzatuvchi';
     }
 
@@ -5239,6 +5589,7 @@
 
     if (modal) {
       modal.style.display = 'flex';
+      modal.removeAttribute('aria-hidden');
       renderLucideIcons(modal);
     }
   };
@@ -5267,36 +5618,83 @@
       appData.viewer = {
         username: 'disabled_' + Date.now(),
         password: '',
-        fullName: "O'chirilgan Kuzatuvchi"
+        fullName: "O'chirilgan Kuzatuvchi",
+        phone: ''
       };
     } else if (role === 'admin') {
       appData.admin = {
         username: 'disabled_admin_' + Date.now(),
-        password: ''
+        password: '',
+        fullName: "O'chirilgan Administrator",
+        phone: ''
       };
     }
 
     DB.save(appData);
 
-    const modal = document.getElementById('modal-delete-user-confirm');
-    if (modal) modal.style.display = 'none';
-    deletingUserTarget = null;
+    window.closeDeleteUserModal();
 
     renderUsersManagement();
     renderAdminDashboard();
+    updateSystemCredentialsDisplay();
     showToast("Foydalanuvchi tizimdan butunlay o'chirildi!", "success");
   }
+
+  window.closeAddUserModal = function () {
+    const modal = document.getElementById('modal-add-user');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  window.closeEditUserModal = function () {
+    const modal = document.getElementById('modal-edit-user');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  };
+
+  window.closeDeleteUserModal = function () {
+    const modal = document.getElementById('modal-delete-user-confirm');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    deletingUserTarget = null;
+  };
 
   window.openAddUserModal = function () {
     const modal = document.getElementById('modal-add-user');
     const form = document.getElementById('add-user-form');
     if (form) form.reset();
 
+    const addPhone = document.getElementById('add-user-phone');
+    if (addPhone) {
+      addPhone.value = PHONE_PREFIX;
+      setupPhoneInputMask(addPhone);
+    }
+
+    const passInput = document.getElementById('add-user-password');
+    if (passInput) passInput.type = 'password';
+    const togglePassBtn = document.getElementById('toggle-add-user-password');
+    if (togglePassBtn) {
+      togglePassBtn.innerHTML = '<i data-lucide="eye"></i>';
+    }
+
     const salaryGroup = document.getElementById('add-user-salary-group');
     if (salaryGroup) salaryGroup.style.display = 'block';
 
+    const roleSelect = document.getElementById('add-user-role');
+    if (roleSelect) roleSelect.value = 'driver';
+
+    const phoneLabel = document.getElementById('add-user-phone-label');
+    if (phoneLabel) phoneLabel.innerHTML = '<i data-lucide="phone"></i> Telefon raqami *';
+
     if (modal) {
       modal.style.display = 'flex';
+      modal.removeAttribute('aria-hidden');
       renderLucideIcons(modal);
     }
   };
@@ -5307,7 +5705,9 @@
     const fullName = document.getElementById('add-user-fullname').value.trim();
     const login = document.getElementById('add-user-login').value.trim();
     const password = document.getElementById('add-user-password').value.trim();
-    const phone = document.getElementById('add-user-phone').value.trim();
+    const rawPhone = document.getElementById('add-user-phone').value.trim();
+    const phone = (rawPhone && rawPhone !== PHONE_PREFIX) ? formatPhoneNumber(rawPhone) : '';
+    const phoneDigits = phone.replace(/\D/g, '');
     const salary = Number(document.getElementById('add-user-salary').value) || 2000000;
 
     if (!login || !password || !fullName) {
@@ -5315,10 +5715,18 @@
       return;
     }
 
-    const isTaken = (appData.drivers || []).some(d => d.login.toLowerCase() === login.toLowerCase()) ||
-      (appData.admin && appData.admin.username.toLowerCase() === login.toLowerCase()) ||
-      (appData.viewer && appData.viewer.username.toLowerCase() === login.toLowerCase()) ||
-      (appData.superadmin && appData.superadmin.username.toLowerCase() === login.toLowerCase());
+    if (role === 'driver') {
+      if (!rawPhone || rawPhone === PHONE_PREFIX || phoneDigits.length < 12) {
+        showToast("Haydovchi telefon raqamini to'liq kiriting: +998 XX XXX XX XX", "danger");
+        return;
+      }
+    }
+
+    const loginLower = login.toLowerCase();
+    const isTaken = (appData.drivers || []).some(d => (d.login || '').toLowerCase() === loginLower) ||
+      (appData.admin && (appData.admin.username || '').toLowerCase() === loginLower) ||
+      (appData.viewer && (appData.viewer.username || '').toLowerCase() === loginLower) ||
+      (appData.superadmin && (appData.superadmin.username || '').toLowerCase() === loginLower);
 
     if (isTaken) {
       showToast("Ushbu login band! Boshqa login kiriting.", "danger");
@@ -5340,23 +5748,26 @@
     } else if (role === 'admin') {
       appData.admin = {
         username: login,
-        password: password
+        password: password,
+        fullName: fullName || 'Bosh Administrator',
+        phone: phone || ''
       };
     } else if (role === 'viewer') {
       appData.viewer = {
         username: login,
         password: password,
-        fullName: fullName
+        fullName: fullName || 'Kuzatuvchi',
+        phone: phone || ''
       };
     }
 
     DB.save(appData);
 
-    const modal = document.getElementById('modal-add-user');
-    if (modal) modal.style.display = 'none';
+    window.closeAddUserModal();
 
     renderUsersManagement();
     renderAdminDashboard();
+    updateSystemCredentialsDisplay();
     showToast("Yangi foydalanuvchi hisobi muvaffaqiyatli yaratildi!", "success");
   }
 
@@ -5732,6 +6143,9 @@
     // Lucide initialization and observer
     initLucideAutoObserver();
     renderLucideIcons();
+
+    // Telefon raqamlari maskalashini ishga tushirish
+    initAllPhoneInputMasks();
 
     // Theme setup (Dark / Light)
     ThemeManager.init();
@@ -6126,6 +6540,9 @@
         window.closeQuickAdvanceModal();
         window.closeTechSupportModal();
         window.closeDriverRankingModal();
+        if (typeof window.closeAddUserModal === 'function') window.closeAddUserModal();
+        if (typeof window.closeEditUserModal === 'function') window.closeEditUserModal();
+        if (typeof window.closeDeleteUserModal === 'function') window.closeDeleteUserModal();
       }
     });
 
@@ -6330,55 +6747,115 @@
     const btnCloseEditModal = document.getElementById('btn-close-edit-user-modal');
     const btnCancelEditUser = document.getElementById('btn-cancel-edit-user');
     if (btnCloseEditModal) {
-      btnCloseEditModal.addEventListener('click', () => {
-        const m = document.getElementById('modal-edit-user');
-        if (m) m.style.display = 'none';
+      btnCloseEditModal.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeEditUserModal();
       });
     }
     if (btnCancelEditUser) {
-      btnCancelEditUser.addEventListener('click', () => {
-        const m = document.getElementById('modal-edit-user');
-        if (m) m.style.display = 'none';
+      btnCancelEditUser.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeEditUserModal();
+      });
+    }
+
+    const editUserModalOverlay = document.getElementById('modal-edit-user');
+    if (editUserModalOverlay) {
+      editUserModalOverlay.addEventListener('click', (e) => {
+        if (e.target === editUserModalOverlay) {
+          window.closeEditUserModal();
+        }
       });
     }
 
     const btnCloseAddModal = document.getElementById('btn-close-add-user-modal');
     const btnCancelAddUser = document.getElementById('btn-cancel-add-user');
     if (btnCloseAddModal) {
-      btnCloseAddModal.addEventListener('click', () => {
-        const m = document.getElementById('modal-add-user');
-        if (m) m.style.display = 'none';
+      btnCloseAddModal.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeAddUserModal();
       });
     }
     if (btnCancelAddUser) {
-      btnCancelAddUser.addEventListener('click', () => {
-        const m = document.getElementById('modal-add-user');
-        if (m) m.style.display = 'none';
+      btnCancelAddUser.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeAddUserModal();
+      });
+    }
+
+    const addUserModalOverlay = document.getElementById('modal-add-user');
+    if (addUserModalOverlay) {
+      addUserModalOverlay.addEventListener('click', (e) => {
+        if (e.target === addUserModalOverlay) {
+          window.closeAddUserModal();
+        }
       });
     }
 
     const btnCloseDeleteModal = document.getElementById('btn-close-delete-user-modal');
     const btnCancelDeleteUser = document.getElementById('btn-cancel-delete-user');
     if (btnCloseDeleteModal) {
-      btnCloseDeleteModal.addEventListener('click', () => {
-        const m = document.getElementById('modal-delete-user-confirm');
-        if (m) m.style.display = 'none';
+      btnCloseDeleteModal.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeDeleteUserModal();
       });
     }
     if (btnCancelDeleteUser) {
-      btnCancelDeleteUser.addEventListener('click', () => {
-        const m = document.getElementById('modal-delete-user-confirm');
-        if (m) m.style.display = 'none';
+      btnCancelDeleteUser.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        window.closeDeleteUserModal();
       });
     }
 
-    // Add user role select change (toggle salary field)
+    const deleteUserModalOverlay = document.getElementById('modal-delete-user-confirm');
+    if (deleteUserModalOverlay) {
+      deleteUserModalOverlay.addEventListener('click', (e) => {
+        if (e.target === deleteUserModalOverlay) {
+          window.closeDeleteUserModal();
+        }
+      });
+    }
+
+    // Add user role select change (toggle salary field and phone requirement)
     const addUserRoleSelect = document.getElementById('add-user-role');
     if (addUserRoleSelect) {
       addUserRoleSelect.addEventListener('change', () => {
+        const isDriver = addUserRoleSelect.value === 'driver';
         const salGroup = document.getElementById('add-user-salary-group');
         if (salGroup) {
-          salGroup.style.display = addUserRoleSelect.value === 'driver' ? 'block' : 'none';
+          salGroup.style.display = isDriver ? 'block' : 'none';
+        }
+        const phoneLabel = document.getElementById('add-user-phone-label');
+        if (phoneLabel) {
+          phoneLabel.innerHTML = isDriver ? '<i data-lucide="phone"></i> Telefon raqami *' : '<i data-lucide="phone"></i> Telefon raqami (ixtiyoriy)';
+          renderLucideIcons(phoneLabel);
+        }
+      });
+    }
+
+    // Modal password visibility toggles
+    const toggleEditPassBtn = document.getElementById('toggle-edit-user-password');
+    if (toggleEditPassBtn) {
+      toggleEditPassBtn.addEventListener('click', () => {
+        const passInp = document.getElementById('edit-user-password');
+        if (passInp) {
+          const isPass = passInp.type === 'password';
+          passInp.type = isPass ? 'text' : 'password';
+          toggleEditPassBtn.innerHTML = isPass ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+          renderLucideIcons(toggleEditPassBtn);
+        }
+      });
+    }
+
+    const toggleAddPassBtn = document.getElementById('toggle-add-user-password');
+    if (toggleAddPassBtn) {
+      toggleAddPassBtn.addEventListener('click', () => {
+        const passInp = document.getElementById('add-user-password');
+        if (passInp) {
+          const isPass = passInp.type === 'password';
+          passInp.type = isPass ? 'text' : 'password';
+          toggleAddPassBtn.innerHTML = isPass ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
+          renderLucideIcons(toggleAddPassBtn);
         }
       });
     }
