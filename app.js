@@ -601,6 +601,7 @@
           if (!cloudData || !Array.isArray(cloudData.drivers)) return;
           
           const localData = self.loadLocalOnly();
+          let needsCloudResave = false;
           
           // 1. Merge tombstones (deleted items) from both local and cloud
           const localDelDrivers = Array.isArray(localData?.deletedDriverIds) ? localData.deletedDriverIds : [];
@@ -613,13 +614,72 @@
           const mergedDeletedTruckIds = Array.from(new Set([...localDelTrucks, ...cloudDelTrucks]));
           cloudData.deletedTruckIds = mergedDeletedTruckIds;
 
-          // 2. Filter out all deleted drivers, attendances, advances, shifts, and trucks
-          cloudData.drivers = (cloudData.drivers || []).filter(d => d && !mergedDeletedDriverIds.includes(d.id));
-          cloudData.attendances = (cloudData.attendances || []).filter(a => a && !mergedDeletedDriverIds.includes(a.driverId));
-          cloudData.advances = (cloudData.advances || []).filter(adv => adv && !mergedDeletedDriverIds.includes(adv.driverId));
-          cloudData.shifts = (cloudData.shifts || []).filter(s => s && !mergedDeletedDriverIds.includes(s.driverId));
-          cloudData.trucks = (cloudData.trucks || []).filter(t => t && !mergedDeletedTruckIds.includes(t.id));
-          cloudData.salaryPayouts = (cloudData.salaryPayouts || []).filter(p => p && !mergedDeletedDriverIds.includes(p.driverId));
+          // 2. SMART TWO-WAY MERGE: Mahalliy yangi ma'lumotlarni saqlab qolish (Zero Data Loss)
+          // 2a. Haydovchilar
+          const cloudDriverMap = new Map((cloudData.drivers || []).filter(d => d && !mergedDeletedDriverIds.includes(d.id)).map(d => [d.id, d]));
+          const localValidDrivers = (localData?.drivers || []).filter(d => d && !mergedDeletedDriverIds.includes(d.id));
+          localValidDrivers.forEach(ld => {
+            if (!cloudDriverMap.has(ld.id)) {
+              cloudDriverMap.set(ld.id, ld);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.drivers = Array.from(cloudDriverMap.values());
+
+          // 2b. Mashinalar
+          const cloudTruckMap = new Map((cloudData.trucks || []).filter(t => t && !mergedDeletedTruckIds.includes(t.id)).map(t => [t.id, t]));
+          const localValidTrucks = (localData?.trucks || []).filter(t => t && !mergedDeletedTruckIds.includes(t.id));
+          localValidTrucks.forEach(lt => {
+            if (!cloudTruckMap.has(lt.id)) {
+              cloudTruckMap.set(lt.id, lt);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.trucks = Array.from(cloudTruckMap.values());
+
+          // 2c. Reyslar (Attendances)
+          const cloudAttMap = new Map((cloudData.attendances || []).filter(a => a && !mergedDeletedDriverIds.includes(a.driverId)).map(a => [a.id, a]));
+          const localValidAtts = (localData?.attendances || []).filter(a => a && !mergedDeletedDriverIds.includes(a.driverId));
+          localValidAtts.forEach(la => {
+            if (!cloudAttMap.has(la.id)) {
+              cloudAttMap.set(la.id, la);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.attendances = Array.from(cloudAttMap.values());
+
+          // 2d. Avanslar
+          const cloudAdvMap = new Map((cloudData.advances || []).filter(adv => adv && !mergedDeletedDriverIds.includes(adv.driverId)).map(adv => [adv.id, adv]));
+          const localValidAdvs = (localData?.advances || []).filter(adv => adv && !mergedDeletedDriverIds.includes(adv.driverId));
+          localValidAdvs.forEach(la => {
+            if (!cloudAdvMap.has(la.id)) {
+              cloudAdvMap.set(la.id, la);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.advances = Array.from(cloudAdvMap.values());
+
+          // 2e. Smenalar (Shifts)
+          const cloudShiftMap = new Map((cloudData.shifts || []).filter(s => s && !mergedDeletedDriverIds.includes(s.driverId)).map(s => [s.id, s]));
+          const localValidShifts = (localData?.shifts || []).filter(s => s && !mergedDeletedDriverIds.includes(s.driverId));
+          localValidShifts.forEach(ls => {
+            if (!cloudShiftMap.has(ls.id)) {
+              cloudShiftMap.set(ls.id, ls);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.shifts = Array.from(cloudShiftMap.values());
+
+          // 2f. Oylik to'lovlari (Salary payouts)
+          const cloudPayoutMap = new Map((cloudData.salaryPayouts || []).filter(p => p && !mergedDeletedDriverIds.includes(p.driverId)).map(p => [p.id, p]));
+          const localValidPayouts = (localData?.salaryPayouts || []).filter(p => p && !mergedDeletedDriverIds.includes(p.driverId));
+          localValidPayouts.forEach(lp => {
+            if (!cloudPayoutMap.has(lp.id)) {
+              cloudPayoutMap.set(lp.id, lp);
+              needsCloudResave = true;
+            }
+          });
+          cloudData.salaryPayouts = Array.from(cloudPayoutMap.values());
 
           // 3. Ensure superadmin, viewer, and admin credentials exist
           if (!cloudData.superadmin) {
@@ -636,6 +696,12 @@
 
           appData = cloudData;
           self.saveLocal(appData);
+
+          // Agar mahalliy yangi ma'lumotlar birlashtirilgan bo'lsa, bulutga ham darhol sinxronlab qo'yamiz
+          if (needsCloudResave) {
+            self.save(appData);
+          }
+
           updateCloudStatusUI(true, "Firebase Firestore ga muvaffaqiyatli ulangan. Real-vaqt sinxronizatsiyasi faol!");
           
           if (currentSession) {
@@ -744,14 +810,15 @@
           needsSave = true;
         }
 
-        // Ensure trucks exist
-        if (!data.trucks || !Array.isArray(data.trucks) || data.trucks.length === 0) {
-          data.trucks = [
-            { id: 'trk_1', name: 'Volvo FH 500', plateNumber: '01 A 777 AA' },
-            { id: 'trk_2', name: 'MAN TGX 18.440', plateNumber: '10 B 555 BB' },
-            { id: 'trk_3', name: 'Mercedes-Benz Actros', plateNumber: '40 C 999 CC' },
-            { id: 'trk_4', name: 'Isuzu FTR 850', plateNumber: '60 D 111 DD' }
-          ];
+        // Ensure drivers exist as array
+        if (!data.drivers || !Array.isArray(data.drivers)) {
+          data.drivers = [];
+          needsSave = true;
+        }
+
+        // Ensure trucks exist as array
+        if (!data.trucks || !Array.isArray(data.trucks)) {
+          data.trucks = [];
           needsSave = true;
         }
 
@@ -763,18 +830,7 @@
 
         // Ensure advances exist
         if (!data.advances || !Array.isArray(data.advances)) {
-          data.advances = [
-            {
-              id: 'adv_demo_1',
-              driverId: 'drv_1',
-              driverName: 'Alisher Rustamov',
-              phone: '+998 90 123 45 67',
-              amount: 500000,
-              date: getTodayString(),
-              time: '09:15:00',
-              comment: 'Yo\'l xarajati uchun avans'
-            }
-          ];
+          data.advances = [];
           needsSave = true;
         }
 
@@ -843,6 +899,16 @@
     saveLocal(data) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        // Avtomatik zaxiralash (Auto-backup): har doim oxirgi nusxani saqlaydi
+        try {
+          const backupPayload = JSON.stringify({
+            savedAt: new Date().toISOString(),
+            data: data
+          });
+          localStorage.setItem('logistpay_auto_backup_latest', backupPayload);
+        } catch (backupErr) {
+          // Xotira to'lib qolsa asosiy ishga xalaqit qilmaslik
+        }
       } catch (e) {
         console.error('LocalStorage save error:', e);
       }
@@ -5844,6 +5910,67 @@
       });
     }
 
+    // Zaxirani qayta tiklash (Import Backup JSON)
+    const btnImport = document.getElementById('btn-import-backup');
+    const inputImport = document.getElementById('input-import-backup');
+    if (btnImport && inputImport) {
+      btnImport.addEventListener('click', () => {
+        if (currentSession?.role === 'viewer') {
+          showToast("Kuzatuvchi rejimida zaxirani tiklash taqiqlangan!", 'warning');
+          return;
+        }
+        inputImport.click();
+      });
+
+      inputImport.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          try {
+            const imported = JSON.parse(evt.target.result);
+            if (!imported || typeof imported !== 'object') {
+              throw new Error("Noto'g'ri JSON fayl formati");
+            }
+
+            if (!Array.isArray(imported.drivers) && !Array.isArray(imported.trucks)) {
+              throw new Error("Fayl ichida LogistPay ma'lumotlari topilmadi");
+            }
+
+            const driverCount = imported.drivers ? imported.drivers.length : 0;
+            const truckCount = imported.trucks ? imported.trucks.length : 0;
+            const tripCount = imported.attendances ? imported.attendances.length : 0;
+
+            if (!confirm(`Zaxira fayli aniqlandi:\n\n• Haydovchilar: ${driverCount} nafar\n• Mashinalar: ${truckCount} ta\n• Reyslar: ${tripCount} ta\n\nUshbu ma'lumotlarni joriy tizim va Firebase bazasiga tiklashni tasdiqlaysizmi?`)) {
+              inputImport.value = '';
+              return;
+            }
+
+            imported.deletedDriverIds = Array.isArray(imported.deletedDriverIds) ? imported.deletedDriverIds : [];
+            imported.deletedTruckIds = Array.isArray(imported.deletedTruckIds) ? imported.deletedTruckIds : [];
+            imported.drivers = Array.isArray(imported.drivers) ? imported.drivers : [];
+            imported.trucks = Array.isArray(imported.trucks) ? imported.trucks : [];
+            imported.attendances = Array.isArray(imported.attendances) ? imported.attendances : [];
+            imported.shifts = Array.isArray(imported.shifts) ? imported.shifts : [];
+            imported.advances = Array.isArray(imported.advances) ? imported.advances : [];
+            imported.salaryPayouts = Array.isArray(imported.salaryPayouts) ? imported.salaryPayouts : [];
+
+            appData = imported;
+            DB.save(appData);
+            showToast("Zaxira nusxasi muvaffaqiyatli tiklandi va Firebase ga saqlandi!", 'success');
+            renderAdminDashboard();
+          } catch (err) {
+            console.error("Import xatosi:", err);
+            showToast("Zaxira faylini o'qishda xatolik: " + err.message, 'danger');
+          } finally {
+            inputImport.value = '';
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
     const btnReset = document.getElementById('btn-reset-demo');
     if (btnReset) {
       btnReset.addEventListener('click', () => {
@@ -5851,10 +5978,16 @@
           showToast("Kuzatuvchi rejimida tizimni qayta tiklash taqiqlangan!", 'warning');
           return;
         }
-        if (confirm("Barcha ma'lumotlar boshlang'ich demo holatiga qaytarilsinmi?")) {
+        const confirmWord = prompt(
+          "⚠️ DIQQAT! Barcha kiritilgan haydovchilar, mashinalar va reyslar ma'lumotlari butunlay o'chib ketadi!\n\n" +
+          "Haqiqatdan ham boshlang'ich holatga qaytarmoqchi bo'lsangiz, tasdiqlash uchun 'TOZALASH' so'zini yozing:"
+        );
+        if (confirmWord === 'TOZALASH') {
           appData = DB.reset();
           showToast("Ma'lumotlar bazasi boshlang'ich holatga qaytarildi", 'info');
           renderAdminDashboard();
+        } else if (confirmWord !== null) {
+          showToast("Noto'g'ri so'z kiritildi. Baza o'zgarishsiz qoldi.", 'warning');
         }
       });
     }

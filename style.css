@@ -6725,3 +6725,34 @@ body.is-viewer .editable-input {
 .ranking-table-wrap {
   -webkit-overflow-scrolling: touch;
 }
+
+/* ================= ⚠️ MAINTENANCE NOTICE BANNER ================= */
+.maintenance-banner {
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0.85rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.35);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 99999;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .maintenance-banner {
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    line-height: 1.35;
+  }
+}
+

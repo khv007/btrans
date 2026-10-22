@@ -1,14 +1,14 @@
 // BOURKHAN TRANS - Progressive Web App (PWA) Service Worker
 // Offline caching and background performance optimization
 
-const CACHE_NAME = 'bourkhan-trans-v9';
+const CACHE_NAME = 'bourkhan-trans-v10';
 const CORE_ASSETS = [
   './',
   './index.html',
   './style.css',
-  './style.css?v=4.6',
+  './style.css?v=4.7',
   './app.js',
-  './app.js?v=4.6',
+  './app.js?v=4.7',
   './manifest.json',
   './favicon.ico',
   './favicon-16x16.png',
