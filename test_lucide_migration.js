@@ -36,19 +36,19 @@ try {
 
 // 4. Verify sw.js cache name
 const sw = fs.readFileSync('sw.js', 'utf8');
-if (!sw.includes("const CACHE_NAME = 'bourkhan-trans-v10';")) {
-  console.error('FAIL: sw.js CACHE_NAME is not bourkhan-trans-v10');
+if (!sw.includes("const CACHE_NAME = 'bourkhan-trans-v11';")) {
+  console.error('FAIL: sw.js CACHE_NAME is not bourkhan-trans-v11');
   process.exit(1);
 } else {
-  console.log('PASS: sw.js cache version is bourkhan-trans-v10');
+  console.log('PASS: sw.js cache version is bourkhan-trans-v11');
 }
 
 // 5. Verify index.html cache busts
-if (!html.includes('style.css?v=4.7') || !html.includes('app.js?v=4.7')) {
+if (!html.includes('style.css?v=4.8') || !html.includes('app.js?v=4.8')) {
   console.error('FAIL: Cache bust versions missing in index.html');
   process.exit(1);
 } else {
-  console.log('PASS: index.html correctly references style.css?v=4.7 and app.js?v=4.7');
+  console.log('PASS: index.html correctly references style.css?v=4.8 and app.js?v=4.8');
 }
 
 // 6. Verify Lucide icons existence

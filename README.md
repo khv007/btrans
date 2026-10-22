@@ -16,7 +16,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
   - **O'chirish (Delete)**: SuperAdmin istalgan foydalanuvchini (hatto admin yoki haydovchini) tizimdan butunlay o'chirib tashlay oladi.
   - **Yangi foydalanuvchi yaratish**: Istalgan rolda yangi xodim yoki boshqaruvchini tizimga biriktirish.
 - **🛡️ Ma'lumotlar bazasiga kirish**:
-  - SuperAdmin "Ma'lumotlar bazasi" bo'limiga ham xavfsizlik uchun faqat maxsus 14 xonali kod (`51605055960187`) kiritilgandagina kira oladi.
+  - SuperAdmin "Ma'lumotlar bazasi" bo'limiga ham xavfsizlik uchun faqat maxsus maxfiy kod (`51605055960187`) kiritilgandagina kira oladi.
 
 ---
 
@@ -52,7 +52,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 - **Joylashuvi**: Navigatsiya panelida "Admin Sozlamalari" tugmasi yonida joylashgan.
 - **🔒 Qat'iy maxfiy himoya**:
   - Ushbu bo'limga na oddiy admin, na kuzatuvchi va na haydovchi kira oladi.
-  - Kirish uchun faqat dasturchiga tegishli maxsus 14 xonali PIN kod talab qilinadi: `51605055960187`.
+  - Kirish uchun faqat dasturchiga tegishli maxsus PIN kod talab qilinadi: `51605055960187`.
   - PIN kod to'g'ri kiritilmaguncha bo'lim to'liq qulflangan holatda bo'ladi.
 - **⛔ Bosqichma-bosqich Bloklash Tizimi (Brute-force himoyasi)**:
   - **1-bosqich**: Ketma-ket **3 marta** noto'g'ri kod kiritilganda — bo'lim **24 soatga** to'liq bloklanadi.
@@ -82,7 +82,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 - **🔒 Qat'iy daxlsizlik (Faqat ko'rish tartibi)**:
   - Boshqa ma'lumotlarga (haydovchilar, mashinalar, avanslar, reyslar, admin paroli, bulut sozlamalari) tegib bo'lmaydi, tahrirlab bo'lmaydi, o'chirib bo'lmaydi.
   - Barcha o'chirish tugmalari, yangi haydovchi/mashina qo'shish formalari, avans berish va admin parolini o'zgartirish vositalari bloklangan.
-  - **Hisob sozlamalari xavfsizligi**: Kuzatuvchi o'z login va parolini o'zgartirishi uchun maxsus 14 xonali xavfsizlik kodi (`51605055960187`) kiritilishi shart. Maxfiy kod kiritilmaguncha yoki noto'g'ri kiritilsa almashtirishga yo'l qo'yilmaydi.
+  - **Hisob sozlamalari xavfsizligi**: Kuzatuvchi o'z login va parolini o'zgartirishi uchun maxsus xavfsizlik kodi (`51605055960187`) kiritilishi shart. Maxfiy kod kiritilmaguncha yoki noto'g'ri kiritilsa almashtirishga yo'l qo'yilmaydi.
   - "Ma'lumotlar bazasi" va "Avanslar" tugmalari kuzatuvchi uchun ko'rinmaydi (to'liq yashirilgan).
 
 ---

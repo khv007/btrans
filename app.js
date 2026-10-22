@@ -5607,7 +5607,7 @@
       return;
     }
 
-    // 14 xonali maxfiy kod tekshiruvi (51605055960187)
+    // Maxfiy tasdiqlash kodi tekshiruvi (51605055960187)
     if (!secretCode) {
       showToast("Login va parolni o'zgartirish uchun maxfiy kodni kiriting!", 'warning');
       if (secretCodeInput) secretCodeInput.focus();
