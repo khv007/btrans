@@ -836,10 +836,20 @@
           });
         }
 
-        // Ensure trucks exist as array
+        // Ensure trucks exist as array and normalize plate numbers
         if (!data.trucks || !Array.isArray(data.trucks)) {
           data.trucks = [];
           needsSave = true;
+        } else {
+          data.trucks.forEach(t => {
+            if (t && t.plateNumber) {
+              const formatted = formatPlateNumber(t.plateNumber);
+              if (formatted !== t.plateNumber) {
+                t.plateNumber = formatted;
+                needsSave = true;
+              }
+            }
+          });
         }
 
         // Ensure shifts exist
@@ -879,7 +889,7 @@
             }
             if (!att.tripNumber) { att.tripNumber = 1; needsSave = true; }
             if (!att.truckName) {
-              const trk = data.trucks.find(t => t.plateNumber === att.truckNumber);
+              const trk = data.trucks.find(t => (t.plateNumber || '').replace(/\s+/g, '') === (att.truckNumber || '').replace(/\s+/g, ''));
               att.truckName = trk ? trk.name : 'Volvo FH';
               needsSave = true;
             }
@@ -1357,6 +1367,125 @@
       if (el) setupPhoneInputMask(el);
     });
   }
+
+  // ================= DAVLAT RAQAMLARI FORMATI VA AVTO-MASKA TIZIMI =================
+  function formatPlateNumber(val) {
+    if (!val) return '';
+    const clean = String(val).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (!clean) return '';
+
+    // O'zbekiston viloyat kodi (01-95) bilan boshlansa
+    if (/^\d{2}/.test(clean)) {
+      const region = clean.slice(0, 2);
+      const rest = clean.slice(2);
+
+      if (!rest) return region;
+
+      // Type 1: Jismoniy shaxs formati (masalan: 50 A 003 AA yoki 01 A 777 AA)
+      if (/^[A-Z]/.test(rest)) {
+        const p1 = rest.slice(0, 1);
+        const afterP1 = rest.slice(1);
+        if (!afterP1) return `${region} ${p1}`;
+
+        const digitsMatch = afterP1.match(/^\d{1,3}/);
+        if (digitsMatch) {
+          const digits = digitsMatch[0];
+          const afterDigits = afterP1.slice(digits.length);
+          if (!afterDigits) return `${region} ${p1} ${digits}`;
+          const suffix = afterDigits.replace(/[^A-Z]/g, '').slice(0, 2);
+          return `${region} ${p1} ${digits}` + (suffix ? ` ${suffix}` : '');
+        } else {
+          return `${region} ${p1}`;
+        }
+      }
+
+      // Type 2 & 3: Yuridik shaxs (50 003 AAA) yoki Pritsep (50 1234 AA)
+      const digitsMatch = rest.match(/^\d+/);
+      if (digitsMatch) {
+        const allDigits = digitsMatch[0];
+        const afterDigits = rest.slice(allDigits.length);
+        const suffixLetters = afterDigits.replace(/[^A-Z]/g, '');
+
+        if (allDigits.length >= 4) {
+          const d4 = allDigits.slice(0, 4);
+          const s2 = suffixLetters.slice(0, 2);
+          return `${region} ${d4}` + (s2 ? ` ${s2}` : '');
+        } else {
+          const d3 = allDigits.slice(0, 3);
+          const s3 = suffixLetters.slice(0, 3);
+          return `${region} ${d3}` + (s3 ? ` ${s3}` : '');
+        }
+      }
+    }
+
+    return String(val).trim().toUpperCase().replace(/\s+/g, ' ');
+  }
+  window.formatPlateNumber = formatPlateNumber;
+
+  function setupPlateInputMask(input) {
+    if (!input || input._hasPlateMask) return;
+    input._hasPlateMask = true;
+
+    function applyFormat() {
+      const oldVal = input.value;
+      const oldCursor = input.selectionStart ?? oldVal.length;
+
+      let nonSpacesBefore = 0;
+      for (let i = 0; i < oldCursor && i < oldVal.length; i++) {
+        if (oldVal[i] !== ' ') nonSpacesBefore++;
+      }
+
+      const formatted = formatPlateNumber(oldVal);
+      input.value = formatted;
+
+      let newCursor = 0;
+      let count = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (formatted[i] !== ' ') count++;
+        if (count === nonSpacesBefore) {
+          newCursor = i + 1;
+          break;
+        }
+      }
+      if (nonSpacesBefore === 0) newCursor = 0;
+      if (count < nonSpacesBefore) newCursor = formatted.length;
+
+      if (document.activeElement === input) {
+        input.setSelectionRange(newCursor, newCursor);
+      }
+    }
+
+    input.addEventListener('input', applyFormat);
+
+    input.addEventListener('keydown', (e) => {
+      const cursor = input.selectionStart ?? 0;
+      const end = input.selectionEnd ?? 0;
+
+      // Backspace probelda tursa, probeldan oldingi belgini ham o'chirish
+      if (e.key === 'Backspace' && cursor === end && cursor > 0 && input.value[cursor - 1] === ' ') {
+        e.preventDefault();
+        const val = input.value;
+        input.value = val.slice(0, cursor - 2) + val.slice(cursor);
+        applyFormat();
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData)?.getData('text') || '';
+      input.value = formatPlateNumber(pasted);
+      applyFormat();
+    });
+  }
+  window.setupPlateInputMask = setupPlateInputMask;
+
+  function initAllPlateInputMasks() {
+    const selector = '#new-truck-plate, .truck-plate-input';
+    document.querySelectorAll(selector).forEach(el => {
+      if (el) setupPlateInputMask(el);
+    });
+  }
+  window.initAllPlateInputMasks = initAllPlateInputMasks;
 
   // ================= XSS SANITIZATION HELPER =================
   function escapeHtml(str) {
@@ -3240,7 +3369,7 @@
     if (searchVal) {
       filtered = filtered.filter(a => 
         (a.driverName && a.driverName.toLowerCase().includes(searchVal)) ||
-        (a.truckNumber && a.truckNumber.toLowerCase().includes(searchVal)) ||
+        (a.truckNumber && (a.truckNumber.toLowerCase().includes(searchVal) || a.truckNumber.toLowerCase().replace(/\s+/g, '').includes(searchVal.replace(/\s+/g, '')))) ||
         (a.truckName && a.truckName.toLowerCase().includes(searchVal)) ||
         (a.fromRegion && a.fromRegion.toLowerCase().includes(searchVal)) ||
         (a.toRegion && a.toRegion.toLowerCase().includes(searchVal)) ||
@@ -3540,7 +3669,7 @@
         <tr>
           <td>${idx + 1}</td>
           <td><strong><i data-lucide="truck" class="text-primary"></i> ${escapeHtml(truck.name)}</strong></td>
-          <td><span class="truck-badge" style="font-size:0.95rem;">${escapeHtml(truck.plateNumber)}</span></td>
+          <td><span class="truck-badge" style="font-size:0.95rem;">${escapeHtml(formatPlateNumber(truck.plateNumber))}</span></td>
           <td>${statusBadge}</td>
           <td>
             ${currentSession?.role === 'viewer' ? `<span class="read-only-badge"><i data-lucide="lock"></i> Faqat ko'rish</span>` : `
@@ -3560,7 +3689,8 @@
       return;
     }
     const name = document.getElementById('new-truck-name').value.trim();
-    const plate = document.getElementById('new-truck-plate').value.trim().toUpperCase();
+    const rawPlate = document.getElementById('new-truck-plate').value.trim();
+    const plate = formatPlateNumber(rawPlate);
 
     if (!name || !plate) {
       showToast("Mashina rusumi va davlat raqamini kiriting!", 'warning');
@@ -3569,9 +3699,9 @@
 
     if (!appData.trucks) appData.trucks = [];
 
-    // Duplicate check
-    const normalizedPlate = plate.replace(/\s+/g, '');
-    if (appData.trucks.some(t => t.plateNumber.replace(/\s+/g, '') === normalizedPlate)) {
+    // Duplicate check (bo'sh joylarni hisobga olmagan holda solishtirish)
+    const normalizedPlate = plate.replace(/\s+/g, '').toUpperCase();
+    if (appData.trucks.some(t => (t.plateNumber || '').replace(/\s+/g, '').toUpperCase() === normalizedPlate)) {
       showToast(`'${plate}' raqamli mashina allaqachon ro'yxatda mavjud!`, 'danger');
       return;
     }
@@ -3953,7 +4083,7 @@
     if (searchVal) {
       filtered = filtered.filter(a => 
         (a.driverName && a.driverName.toLowerCase().includes(searchVal)) ||
-        (a.truckNumber && a.truckNumber.toLowerCase().includes(searchVal)) ||
+        (a.truckNumber && (a.truckNumber.toLowerCase().includes(searchVal) || a.truckNumber.toLowerCase().replace(/\s+/g, '').includes(searchVal.replace(/\s+/g, '')))) ||
         (a.truckName && a.truckName.toLowerCase().includes(searchVal)) ||
         (a.fromRegion && a.fromRegion.toLowerCase().includes(searchVal)) ||
         (a.toRegion && a.toRegion.toLowerCase().includes(searchVal))
@@ -6154,8 +6284,9 @@
     initLucideAutoObserver();
     renderLucideIcons();
 
-    // Telefon raqamlari maskalashini ishga tushirish
+    // Telefon va davlat raqamlari maskalashini ishga tushirish
     initAllPhoneInputMasks();
+    initAllPlateInputMasks();
 
     // Theme setup (Dark / Light)
     ThemeManager.init();
