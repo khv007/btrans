@@ -4014,7 +4014,12 @@
       return row;
     });
 
-    const fileName = `LogistPay_Reyslar_Hisoboti_${selectedMonth}.xlsx`;
+    const now = new Date();
+    const d = String(now.getDate()).padStart(2, '0');
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const y = now.getFullYear();
+    const dateFormatted = `${d}.${m}.${y}`;
+    const fileName = `BourkhanTrans_Reyslar_Hisoboti_${dateFormatted}.xlsx`;
 
     // Check if SheetJS is available, otherwise use CSV fallback
     if (typeof XLSX === 'undefined') {
@@ -4671,7 +4676,12 @@
     }
 
     const safeName = driver.fullName.replace(/\s+/g, '_');
-    const fileName = `${safeName}_Reyslar_Hisoboti_${selectedMonth}.xlsx`;
+    const now = new Date();
+    const d = String(now.getDate()).padStart(2, '0');
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const y = now.getFullYear();
+    const dateFormatted = `${d}.${m}.${y}`;
+    const fileName = `${safeName}_Reyslar_Hisoboti_${dateFormatted}.xlsx`;
 
     if (typeof XLSX === 'undefined') {
       exportToCSVFallback(attendanceRows, summaryRows, fileName);
