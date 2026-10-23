@@ -7,7 +7,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 ## 📌 Asosiy Xususiyatlar va Rollar
 
 ### 👑 0. SUPERADMIN (Tizimning mutlaq boshqaruvchisi)
-- **Avtorizatsiya**: SuperAdmin hisobi: Login: `AD2717578` / Parol: `51605055960187`.
+- **Avtorizatsiya**: SuperAdmin shaxsiy hisob ma'lumotlari orqali kirish.
 - **👑 Rollar Boshqaruvi Paneli**:
   - Tizimdagi barcha rollar (Administratorlar, Kuzatuvchi, Haydovchilar) yagona interaktiv boshqaruv markazidan nazorat qilinadi.
   - Har bir foydalanuvchining **F.I.O, Tizimdagi roli, Logini, Paroli, Telefon raqami, Belgilangan oylik maoshi va Kunlik stavkasi** to'liq ko'rsatiladi.
@@ -16,12 +16,12 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
   - **O'chirish (Delete)**: SuperAdmin istalgan foydalanuvchini (hatto admin yoki haydovchini) tizimdan butunlay o'chirib tashlay oladi.
   - **Yangi foydalanuvchi yaratish**: Istalgan rolda yangi xodim yoki boshqaruvchini tizimga biriktirish.
 - **🛡️ Ma'lumotlar bazasiga kirish**:
-  - SuperAdmin "Ma'lumotlar bazasi" bo'limiga ham xavfsizlik uchun faqat maxsus maxfiy kod (`51605055960187`) kiritilgandagina kira oladi.
+  - SuperAdmin "Ma'lumotlar bazasi" bo'limiga ham xavfsizlik uchun faqat maxsus maxfiy kod kiritilgandagina kira oladi.
 
 ---
 
 ### 👨‍💼 1. ADMIN (Rahbar) paneli
-- **Avtorizatsiya**: Boshqaruv paneliga maxsus login va parol (`admin123` / `20040915`) orqali kirish.
+- **Avtorizatsiya**: Boshqaruv paneliga tegishli login va parol orqali kirish.
 - **Haydovchilar boshqaruvi**:
   - Yangi haydovchi qo'shish (*F.I.O, Telefon raqami, Belgilangan oylik maoshi, Login va Parol*).
   - Har qanday haydovchiga yo'nalish masofasiga qarab **Minimal ruxsat vaqti (70 km/s + 15 daq)** tatbiq etiladi (Viloyat ichida esa 30:00 daqiqa).
@@ -52,7 +52,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 - **Joylashuvi**: Navigatsiya panelida "Admin Sozlamalari" tugmasi yonida joylashgan.
 - **🔒 Qat'iy maxfiy himoya**:
   - Ushbu bo'limga na oddiy admin, na kuzatuvchi va na haydovchi kira oladi.
-  - Kirish uchun faqat dasturchiga tegishli maxsus PIN kod talab qilinadi: `51605055960187`.
+  - Kirish uchun faqat dasturchiga tegishli maxsus PIN kod talab qilinadi.
   - PIN kod to'g'ri kiritilmaguncha bo'lim to'liq qulflangan holatda bo'ladi.
 - **⛔ Bosqichma-bosqich Bloklash Tizimi (Brute-force himoyasi)**:
   - **1-bosqich**: Ketma-ket **3 marta** noto'g'ri kod kiritilganda — bo'lim **24 soatga** to'liq bloklanadi.
@@ -67,7 +67,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 ---
 
 ### 👁️ 3. KUZATUVCHI (Faqat Ko'rish / To'liq Nazorat va Monitoring)
-- **Avtorizatsiya**: Kuzatuvchi hisobi (`Husanboy` / `20050516`). Kuzatuvchi o'z sozlamalar bo'limidan o'z login va parolini maxsus maxfiy kod (`51605055960187`) kiritish orqali yangilashi mumkin.
+- **Avtorizatsiya**: Kuzatuvchi hisob ma'lumotlari orqali kirish. Kuzatuvchi o'z sozlamalar bo'limidan o'z login va parolini maxsus maxfiy kod kiritish orqali yangilashi mumkin.
 - **Admin paneldan maxfiylik**: Bosh Administrator panelida kuzatuvchi haqida hech qanday login, parol yoki ma'lumotlar ko'rinmaydi.
 - **Monitoring va kuzatish huquqi**:
   - Barcha haydovchilar faoliyati, ularning bajargan reyslari soni, joriy holati (reysda, kutmoqda, dam olgan).
@@ -82,7 +82,7 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 - **🔒 Qat'iy daxlsizlik (Faqat ko'rish tartibi)**:
   - Boshqa ma'lumotlarga (haydovchilar, mashinalar, avanslar, reyslar, admin paroli, bulut sozlamalari) tegib bo'lmaydi, tahrirlab bo'lmaydi, o'chirib bo'lmaydi.
   - Barcha o'chirish tugmalari, yangi haydovchi/mashina qo'shish formalari, avans berish va admin parolini o'zgartirish vositalari bloklangan.
-  - **Hisob sozlamalari xavfsizligi**: Kuzatuvchi o'z login va parolini o'zgartirishi uchun maxsus xavfsizlik kodi (`51605055960187`) kiritilishi shart. Maxfiy kod kiritilmaguncha yoki noto'g'ri kiritilsa almashtirishga yo'l qo'yilmaydi.
+  - **Hisob sozlamalari xavfsizligi**: Kuzatuvchi o'z login va parolini o'zgartirishi uchun maxsus xavfsizlik kodi kiritilishi shart. Maxfiy kod kiritilmaguncha yoki noto'g'ri kiritilsa almashtirishga yo'l qo'yilmaydi.
   - "Ma'lumotlar bazasi" va "Avanslar" tugmalari kuzatuvchi uchun ko'rinmaydi (to'liq yashirilgan).
 
 ---
@@ -111,21 +111,19 @@ Bourkhan Trans logistika firmasi haydovchilar davomati, avtopark, reyslar va mao
 
 ---
 
-### 🔑 Tizim hisob ma'lumotlari:
-- **Saytga kirish sahifasi**: Login va parollar ochiq holda ko'rsatilmaydi (xavfsizlik va maxfiylik uchun demo chiplar olib tashlangan).
-- **👑 SuperAdmin (Mutlaq boshqaruv)**: `AD2717578` / parol: `51605055960187`
-- **Admin (Bosh Administrator)**: `admin123` / parol: `admin321`
-- **Kuzatuvchi (Faqat ko'rish)**: `Husanboy` / parol: `20050516`
-- **Haydovchilar**:
-  - `alisher` / parol: `1234`
-  - `botir` / parol: `1234`
-  - `jasur` / parol: `1234`
-  - `anvar` / parol: `12345`
+### 🔑 Xavfsizlik va Kirish Huquqlari:
+- **Maxfiylik siyosati**: Xavfsizlik talablariga muvofiq, tizim profillarining shaxsiy login va parollari ochiq manbalarda (GitHub) ko'rsatilmaydi.
+- **Ruxsat berilgan rollar**:
+  - **👑 SuperAdmin**: Tizimning mutlaq boshqaruvchisi
+  - **👨‍💼 Admin**: Logistika, haydovchilar, avans va avtopark boshqaruvchisi
+  - **👁️ Kuzatuvchi**: Monitoring va tahlil (faqat ko'rish huquqi bilan)
+  - **🚛 Haydovchilar**: Shaxsiy kabinet, reyslar va maosh hisobi
+- **Avtorizatsiya**: Har bir foydalanuvchi ma'muriyat tomonidan taqdim etilgan shaxsiy login va paroli orqali tizimga kiradi.
 
 ---
 
 ### 🚀 Qanday ishga tushiriladi?
-1. [index.html](file:///d:/Loyihalar/Maoshni%20taqsimlash/index.html) faylini to'g'ridan-to'g'ri istalgan zamonaviy brauzeringizda (Chrome, Edge, Firefox, Safari) oching yoki quyidagi buyruq bilan lokal serverni ishga tushiring:
+1. [index.html](index.html) faylini to'g'ridan-to'g'ri istalgan zamonaviy brauzeringizda (Chrome, Edge, Firefox, Safari) oching yoki quyidagi buyruq bilan lokal serverni ishga tushiring:
    ```bash
    python -m http.server 8089
    ```
