@@ -950,7 +950,7 @@
         const payloadToSave = {
           payload: JSON.stringify(data),
           lastUpdated: new Date().toISOString(),
-          systemName: "LogistPay",
+          systemName: "BourkhanTrans",
           admin: data.admin,
           viewer: data.viewer,
           superadmin: data.superadmin,
@@ -974,7 +974,7 @@
       const payloadToSave = {
         payload: JSON.stringify(appData),
         lastUpdated: new Date().toISOString(),
-        systemName: "LogistPay",
+        systemName: "BourkhanTrans",
         admin: appData.admin,
         viewer: appData.viewer,
         superadmin: appData.superadmin,
@@ -6458,7 +6458,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `LogistPay_Backup_${getTodayString()}.json`;
+        a.download = `BourkhanTrans_Backup_${getTodayString()}.json`;
         a.click();
         URL.revokeObjectURL(url);
         showToast("Zaxira nusxasi (JSON) yuklab olindi", 'info');
@@ -6490,7 +6490,7 @@
             }
 
             if (!Array.isArray(imported.drivers) && !Array.isArray(imported.trucks)) {
-              throw new Error("Fayl ichida LogistPay ma'lumotlari topilmadi");
+              throw new Error("Fayl ichida Bourkhan Trans ma'lumotlari topilmadi");
             }
 
             const driverCount = imported.drivers ? imported.drivers.length : 0;

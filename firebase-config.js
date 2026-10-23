@@ -1,5 +1,5 @@
 /**
- * LOGISTPAY - FIREBASE CLOUD DATABASE SOZLAMALARI
+ * BOURKHAN TRANS - FIREBASE CLOUD DATABASE SOZLAMALARI
  * =========================================================================
  * Barcha IP manzillar, kompyuterlar va haydovchilarning telefonlari
  * bitta umumiy internet bazasiga ulanishi uchun ushbu konfiguratsiya ishlatiladi.
